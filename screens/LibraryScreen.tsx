@@ -6,6 +6,7 @@ export default function LibraryScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.text}>Library Screen</Text>
+      <Text>Demo</Text>
     </SafeAreaView>
   );
 }
