@@ -2,7 +2,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { NavigatorScreenParams } from '@react-navigation/native'; // Cần cho lồng nhau
-
+import { Song } from '../interfaces/data';
 /**
  * Định nghĩa cho Bottom Tab Navigator
  */
@@ -23,6 +23,10 @@ export type RootStackParamList = {
     playlistId: string;
     title: string;
     artwork: any;
+  };
+  Player: {
+    song: Song;
+    playlist: Song[];
   };
 };
 
