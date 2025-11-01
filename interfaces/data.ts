@@ -6,6 +6,7 @@ export interface Song {
   title: string;
   artist: string;
   duration: string;
+  plays?: string;
   artwork: any; // Dùng 'any' vì require() trả về kiểu không xác định
 }
 
@@ -27,4 +28,11 @@ export interface Artist {
   id: string;
   name: string;
   avatar: any;
+}
+export interface Playlist {
+  id: string;
+  title: string;
+  artwork: any;
+  songCount?: number;
+  totalDuration?: string;
 }

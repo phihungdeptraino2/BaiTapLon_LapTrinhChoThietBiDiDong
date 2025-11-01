@@ -1,16 +1,16 @@
 // App.tsx
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 // 1. Import types và các bộ điều hướng
-import { RootStackParamList } from './navigation/types';
-import MainTabNavigator from './navigation/MainTabNavigator';
+import { RootStackParamList } from "./navigation/types";
+import MainTabNavigator from "./navigation/MainTabNavigator";
 
 // 2. Import các màn hình trong RootStack
-import WelcomeScreen from './screens/WelcomeScreen';
-import PlaylistScreen from './screens/PlaylistScreen';
-
+import WelcomeScreen from "./screens/WelcomeScreen";
+import PlaylistScreen from "./screens/PlaylistScreen";
+import PlayerScreen from "./screens/PlayerScreen";
 // 3. Khởi tạo RootStack
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -31,7 +31,11 @@ export default function App() {
 
         {/* Nhóm màn hình có Tab Bar */}
         <Stack.Screen name="Main" component={MainTabNavigator} />
-        
+        <Stack.Screen
+          name="Player"
+          component={PlayerScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

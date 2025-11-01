@@ -148,8 +148,8 @@ export default function HomeScreen({ navigation }: Props) {
           playlistId: item.id,
           title: `${item.title} - ${item.subtitle}`,
           artwork: require("../assets/Home - Audio Listing/Container 31.png"),
-    
-           // Truyền một ảnh đại diện
+
+          // Truyền một ảnh đại diện
         })
       }
     >
