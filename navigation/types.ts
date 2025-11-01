@@ -28,6 +28,13 @@ export type RootStackParamList = {
     song: Song;
     playlist: Song[];
   };
+  Artist: {
+    artist: {
+      id: string;
+      name: string;
+      avatar: any;
+    };
+  };
 };
 
 /**

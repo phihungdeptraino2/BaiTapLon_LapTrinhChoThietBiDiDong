@@ -11,6 +11,7 @@ import MainTabNavigator from "./navigation/MainTabNavigator";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import PlaylistScreen from "./screens/PlaylistScreen";
 import PlayerScreen from "./screens/PlayerScreen";
+import ArtistScreen from "./screens/ArtistScreen";
 // 3. Khởi tạo RootStack
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -34,6 +35,11 @@ export default function App() {
         <Stack.Screen
           name="Player"
           component={PlayerScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Artist"
+          component={ArtistScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

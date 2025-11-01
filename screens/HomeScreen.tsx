@@ -13,20 +13,16 @@ import {
   StatusBar,
   ImageBackground,
 } from "react-native";
-// 1. Import types mới
 import { MainTabScreenProps, RootStackParamList } from "../navigation/types";
 import { Chart, Album, Artist } from "../interfaces/data";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-// 2. Import LinearGradient
 import { LinearGradient } from "expo-linear-gradient";
 
-// 3. Định nghĩa kiểu cho navigation
 type RootStackNavigationProp = StackNavigationProp<RootStackParamList>;
 type Props = MainTabScreenProps<"Home">;
 
-// 4. --- DỮ LIỆU MẪU (THAY BẰNG ẢNH CỦA BẠN) ---
 const MOCK_AVATAR = require("../assets/Home - Audio Listing/Avatar 3.png");
 
 const MOCK_SUGGESTIONS = [
@@ -61,19 +57,19 @@ const MOCK_CHARTS: Chart[] = [
     id: "1",
     title: "Top 50",
     subtitle: "Canada",
-    artwork: ["#6E16B0", "#B0168C"], // Màu gradient
+    artwork: ["#6E16B0", "#B0168C"],
   },
   {
     id: "2",
     title: "Top 50",
     subtitle: "Global",
-    artwork: ["#16A1B0", "#16B09F"], // Màu gradient
+    artwork: ["#16A1B0", "#16B09F"],
   },
   {
     id: "3",
     title: "Top 50",
     subtitle: "Daily",
-    artwork: ["#B06216", "#B09616"], // Màu gradient
+    artwork: ["#B06216", "#B09616"],
   },
 ];
 
@@ -104,12 +100,10 @@ const MOCK_ARTISTS: Artist[] = [
     avatar: require("../assets/Home - Audio Listing/Image 40.png"),
   },
 ];
-// ---------------------------------------------
 
 export default function HomeScreen({ navigation }: Props) {
   const rootStackNavigation = useNavigation<RootStackNavigationProp>();
 
-  // Hàm render tiêu đề section (với nút "See all")
   const renderSectionHeader = (title: string) => (
     <View style={styles.sectionHeader}>
       <Text style={styles.sectionTitle}>{title}</Text>
@@ -118,8 +112,6 @@ export default function HomeScreen({ navigation }: Props) {
       </TouchableOpacity>
     </View>
   );
-
-  // --- CÁC HÀM RENDER ITEM CHO FLATLIST ---
 
   const renderSuggestionCard = ({
     item,
@@ -148,8 +140,6 @@ export default function HomeScreen({ navigation }: Props) {
           playlistId: item.id,
           title: `${item.title} - ${item.subtitle}`,
           artwork: require("../assets/Home - Audio Listing/Container 31.png"),
-
-          // Truyền một ảnh đại diện
         })
       }
     >
@@ -171,14 +161,25 @@ export default function HomeScreen({ navigation }: Props) {
 
   const renderArtistCard = ({ item }: { item: Artist }) => (
     <View style={styles.artistCard}>
-      <Image source={item.avatar} style={styles.artistAvatar} />
-      <Text style={styles.artistName}>{item.name}</Text>
+      <TouchableOpacity
+        onPress={() =>
+          rootStackNavigation.navigate("Artist", {
+            artist: {
+              id: item.id,
+              name: item.name,
+              avatar: item.avatar,
+            },
+          })
+        }
+      >
+        <Image source={item.avatar} style={styles.artistAvatar} />
+        <Text style={styles.artistName}>{item.name}</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.followButton}>
         <Text style={styles.followButtonText}>Follow</Text>
       </TouchableOpacity>
     </View>
   );
-  // -----------------------------------------
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -257,26 +258,24 @@ export default function HomeScreen({ navigation }: Props) {
           contentContainerStyle={{ paddingRight: 15 }}
         />
 
-        {/* Thêm một khoảng trống ở dưới cùng */}
         <View style={{ height: 30 }} />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-// 5. --- STYLESHEET ĐÃ CẬP NHẬT ---
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#FFFFFF" },
   container: {
     flex: 1,
-    paddingLeft: 15, // Chỉ padding trái, để list cuộn sát lề phải
+    paddingLeft: 15,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 10,
-    paddingRight: 15, // Header cần padding phải
+    paddingRight: 15,
   },
   greeting: { fontSize: 16, color: "#888" },
   userName: { fontSize: 24, fontWeight: "bold" },
@@ -289,7 +288,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     marginVertical: 20,
-    marginRight: 15, // Search bar cần padding phải
+    marginRight: 15,
   },
   searchInput: {
     flex: 1,
@@ -308,7 +307,6 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: 20, fontWeight: "bold" },
   seeAll: { fontSize: 14, color: "#00AFFF" },
 
-  // Suggestion Card
   suggestionCard: {
     width: 160,
     height: 240,
@@ -321,7 +319,7 @@ const styles = StyleSheet.create({
   },
   suggestionTextOverlay: {
     padding: 10,
-    backgroundColor: "rgba(0,0,0,0.2)", // Lớp phủ nhẹ để chữ dễ đọc
+    backgroundColor: "rgba(0,0,0,0.2)",
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
   },
@@ -335,7 +333,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
-  // Chart Card
   chartCard: {
     width: 140,
     marginRight: 15,
@@ -362,7 +359,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 
-  // Album Card
   albumCard: {
     width: 140,
     marginRight: 15,
@@ -382,7 +378,6 @@ const styles = StyleSheet.create({
     color: "#888",
   },
 
-  // Artist Card
   artistCard: {
     width: 140,
     marginRight: 15,
@@ -391,12 +386,13 @@ const styles = StyleSheet.create({
   artistAvatar: {
     width: 120,
     height: 120,
-    borderRadius: 60, // Hình tròn
+    borderRadius: 60,
   },
   artistName: {
     fontSize: 15,
     fontWeight: "bold",
     marginTop: 8,
+    textAlign: "center",
   },
   followButton: {
     backgroundColor: "#282828",
