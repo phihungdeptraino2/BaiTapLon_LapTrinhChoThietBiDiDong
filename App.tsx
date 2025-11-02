@@ -21,7 +21,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="WelcomePremium" // Bắt đầu từ màn hình Welcome
+        initialRouteName="Welcome" // Bắt đầu từ màn hình Welcome
         // initialRouteName="WelcomePremium" // test màn hình WelcomePremium
         // initialRouteName="SubscriptionPlans" // test màn hình SubscriptionPlans
         
