@@ -5,9 +5,13 @@ export interface Song {
   id: string;
   title: string;
   artist: string;
-  duration: string;
+  artwork: any; // Dùng 'any' vì nó có thể là 'require()' hoặc { uri: '...' }
+  
+  // Sửa đổi/Thêm mới cho API
+  duration?: string;          // Giữ lại (dù ta sẽ dùng durationMillis)
+  durationMillis?: number;    // Dùng cho Player
   plays?: string;
-  artwork: any; // Dùng 'any' vì require() trả về kiểu không xác định
+  audioUrl?: string;          // 👈 Link MP3 thật
 }
 
 export interface Chart {
