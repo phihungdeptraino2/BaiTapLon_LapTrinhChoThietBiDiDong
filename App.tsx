@@ -9,6 +9,8 @@ import MainTabNavigator from "./navigation/MainTabNavigator";
 
 // 2. Import các màn hình trong RootStack
 import WelcomeScreen from "./screens/WelcomeScreen";
+import WelcomeScreenPremium from "./screens/WelcomeScreenPremium";
+import SubscriptionPlansScreen from "./screens/SubscriptionPlansScreen";
 import PlaylistScreen from "./screens/PlaylistScreen";
 import PlayerScreen from "./screens/PlayerScreen";
 import ArtistScreen from "./screens/ArtistScreen";
@@ -20,12 +22,17 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Welcome" // Bắt đầu từ màn hình Welcome
+        // initialRouteName="WelcomePremium" // test màn hình WelcomePremium
+        // initialRouteName="SubscriptionPlans" // test màn hình SubscriptionPlans
+        
         screenOptions={{
           headerShown: false, // Ẩn header cho toàn bộ Stack
         }}
       >
         {/* Các màn hình không có Tab Bar */}
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="WelcomePremium" component={WelcomeScreenPremium} />
+        <Stack.Screen name="SubscriptionPlans" component={SubscriptionPlansScreen} />
 
         {/* Màn hình này sẽ hiển thị trên cùng, che cả Tab Bar */}
         <Stack.Screen name="Playlist" component={PlaylistScreen} />

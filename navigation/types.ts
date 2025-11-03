@@ -18,6 +18,8 @@ export type MainTabParamList = {
  */
 export type RootStackParamList = {
   Welcome: undefined;
+  WelcomePremium: undefined;
+  SubscriptionPlans: undefined;
   Main: NavigatorScreenParams<MainTabParamList>; // Lồng MainTabParamList vào đây
   Playlist: {
     playlistId: string;
