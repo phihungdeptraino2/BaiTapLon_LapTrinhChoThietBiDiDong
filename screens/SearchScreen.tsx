@@ -11,102 +11,198 @@ import {
   Image,
   StatusBar,
   Keyboard,
-  ActivityIndicator, // 👈 MỚI
 } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../navigation/types";
-import { Song } from "../interfaces/data"; // 👈 MỚI
-import { JAMENDO_API_URL, JAMENDO_CLIENT_ID } from "../config"; // 👈 MỚI
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
-// ❌ XÓA MOCK DATA
+// Mock data cho search suggestions
+const SEARCH_SUGGESTIONS = [
+  "Me",
+  "me illum id aliquip",
+  "me lorem",
+  "Me Gonzalez",
+  "Me irure esse",
+  "Me Exercitation",
+  "Me Sint aliquip duis deseru",
+];
+
+// Mock data cho search results
+const SEARCH_RESULTS = {
+  artists: [
+    {
+      id: "1",
+      name: "Mer Watson",
+      followers: "1.234K Followers",
+      avatar: require("../assets/My Library/Image 101.png"),
+      type: "artist",
+    },
+  ],
+  songs: [
+    {
+      id: "2",
+      title: "Me",
+      artist: "Jessica Gonzalez",
+      plays: "2.1M",
+      duration: "3:36",
+      artwork: require("../assets/My Library/Image 102.png"),
+      type: "song",
+    },
+    {
+      id: "3",
+      title: "Me Inc",
+      artist: "Anthony Taylor",
+      plays: "68M",
+      duration: "03:35",
+      artwork: require("../assets/My Library/Image 103.png"),
+      type: "song",
+    },
+    {
+      id: "4",
+      title: "Dozz me",
+      artist: "Brian Bailey",
+      plays: "93M",
+      duration: "04:39",
+      artwork: require("../assets/My Library/Image 104.png"),
+      type: "song",
+    },
+    {
+      id: "5",
+      title: "Eastss me",
+      artist: "Anthony Taylor",
+      plays: "9M",
+      duration: "07:48",
+      artwork: require("../assets/My Library/Image 105.png"),
+      type: "song",
+    },
+    {
+      id: "6",
+      title: "Me Ali",
+      artist: "Pedro Moreno",
+      plays: "23M",
+      duration: "3:36",
+      artwork: require("../assets/My Library/Image 106.png"),
+      type: "song",
+    },
+    {
+      id: "7",
+      title: "Me quis a",
+      artist: "Elena Jimenez",
+      plays: "10M",
+      duration: "06:22",
+      artwork: require("../assets/My Library/Image 107.png"),
+      type: "song",
+    },
+    {
+      id: "8",
+      title: "Me light",
+      artist: "John Smith",
+      plays: "81M",
+      duration: "05:15",
+      artwork: require("../assets/My Library/Image 107.png"),
+      type: "song",
+    },
+  ],
+};
+
+type TabType = "All" | "Tracks" | "Albums" | "Artists";
 
 export default function SearchScreen() {
   const navigation = useNavigation<NavigationProp>();
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<TabType>("All");
   const [showResults, setShowResults] = useState(false);
 
-  // 👈 MỚI: State cho loading và kết quả
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<Song[]>([]);
-
-  // 👈 MỚI: Hàm format thời gian (vì API trả về số)
-  const formatTime = (millis: number) => {
-    if (!millis) return "0:00";
-    const totalSeconds = millis / 1000;
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = Math.floor(totalSeconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
-
-  // 👈 MỚI: Hàm gọi API tìm kiếm
-  const handleSearch = async () => {
-    if (searchQuery.length === 0) {
-      setResults([]);
+  const handleSearch = (text: string) => {
+    setSearchQuery(text);
+    if (text.length > 0) {
+      setShowResults(true);
+    } else {
       setShowResults(false);
-      return;
-    }
-
-    Keyboard.dismiss();
-    setLoading(true);
-    setShowResults(true);
-    setResults([]); // Xóa kết quả cũ
-
-    try {
-      const url = `${JAMENDO_API_URL}/tracks/?client_id=${JAMENDO_CLIENT_ID}&format=json&search=${searchQuery}&limit=20&imagesize=200`;
-
-      const response = await fetch(url);
-      const data = await response.json();
-
-      // Ánh xạ dữ liệu Jamendo về interface 'Song' của bạn
-      const mappedResults: Song[] = data.results.map((track: any) => ({
-        id: track.id,
-        title: track.name,
-        artist: track.artist_name,
-        artwork: track.image || "https://placehold.co/60x60/EEE/333?text=Music",
-        durationMillis: track.duration * 1000,
-        audioUrl: track.audio,
-
-        // 👇 DÒNG ĐÃ SỬA LỖI
-        plays: track.sharecount?.toString() ?? "0",
-      }));
-
-      setResults(mappedResults);
-    } catch (error) {
-      console.error("Lỗi khi tìm kiếm:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleClearSearch = () => {
     setSearchQuery("");
     setShowResults(false);
-    setResults([]);
     Keyboard.dismiss();
   };
 
-  // ❌ BỎ: handleSuggestionPress và renderSuggestion
-  // ❌ BỎ: renderArtistResult và tabs (để giữ cho ví dụ đơn giản)
+  const handleSuggestionPress = (suggestion: string) => {
+    setSearchQuery(suggestion);
+    setShowResults(true);
+    Keyboard.dismiss();
+  };
 
-  // 👈 SỬA: renderSongResult để dùng 'uri' và 'durationMillis'
-  const renderSongResult = (item: Song) => (
+  const tabs: TabType[] = ["All", "Tracks", "Albums", "Artists"];
+
+  // Render suggestion item (Image 1)
+  const renderSuggestion = ({ item }: { item: string }) => (
+    <TouchableOpacity
+      style={styles.suggestionItem}
+      onPress={() => handleSuggestionPress(item)}
+    >
+      <Text style={styles.suggestionText}>{item}</Text>
+    </TouchableOpacity>
+  );
+
+  // Render artist result
+  const renderArtistResult = (item: any) => (
+    <TouchableOpacity
+      style={styles.artistResult}
+      onPress={() =>
+        navigation.navigate("Artist", {
+          artist: {
+            id: item.id,
+            name: item.name,
+            avatar: item.avatar,
+          },
+        })
+      }
+    >
+      <Image source={item.avatar} style={styles.artistAvatar} />
+      <View style={styles.artistInfo}>
+        <Text style={styles.artistName}>{item.name}</Text>
+        <View style={styles.followerRow}>
+          <Ionicons name="person-outline" size={14} color="#888" />
+          <Text style={styles.followers}> {item.followers}</Text>
+        </View>
+      </View>
+      <TouchableOpacity style={styles.followBtn}>
+        <Text style={styles.followBtnText}>Follow</Text>
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
+
+  // Render song result
+  const renderSongResult = (item: any) => (
     <TouchableOpacity
       style={styles.songResult}
       onPress={() =>
         navigation.navigate("Player", {
-          song: item, // 👈 Gửi nguyên đối tượng song (có audioUrl)
-          playlist: results,
+          song: {
+            id: item.id,
+            title: item.title,
+            artist: item.artist,
+            duration: item.duration,
+            plays: item.plays,
+            artwork: item.artwork,
+          },
+          playlist: SEARCH_RESULTS.songs.map((song) => ({
+            id: song.id,
+            title: song.title,
+            artist: song.artist,
+            duration: song.duration,
+            plays: song.plays,
+            artwork: song.artwork,
+          })),
         })
       }
     >
-      <Image
-        source={{ uri: item.artwork as string }} // 👈 SỬA: Dùng 'uri'
-        style={styles.songArtwork}
-      />
+      <Image source={item.artwork} style={styles.songArtwork} />
       <View style={styles.songInfo}>
         <Text style={styles.songTitle}>{item.title}</Text>
         <View style={styles.songMeta}>
@@ -115,10 +211,7 @@ export default function SearchScreen() {
         <View style={styles.songStats}>
           <Ionicons name="play" size={12} color="#888" />
           <Text style={styles.statsText}> {item.plays}</Text>
-          <Text style={styles.statsText}>
-            {" "}
-            • {formatTime(item.durationMillis || 0)}
-          </Text>
+          <Text style={styles.statsText}> • {item.duration}</Text>
         </View>
       </View>
       <TouchableOpacity>
@@ -126,6 +219,16 @@ export default function SearchScreen() {
       </TouchableOpacity>
     </TouchableOpacity>
   );
+
+  // Render search results (Image 2)
+  const renderSearchResult = ({ item }: { item: any }) => {
+    if (item.type === "artist") {
+      return renderArtistResult(item);
+    }
+    return renderSongResult(item);
+  };
+
+  const allResults = [...SEARCH_RESULTS.artists, ...SEARCH_RESULTS.songs];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -137,13 +240,11 @@ export default function SearchScreen() {
           <Feather name="search" size={20} color="#888" />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search songs on Jamendo..." // 👈 SỬA
+            placeholder="me"
             value={searchQuery}
-            onChangeText={setSearchQuery} // 👈 SỬA
+            onChangeText={handleSearch}
             autoFocus={false}
             placeholderTextColor="#888"
-            returnKeyType="search" // 👈 MỚI
-            onSubmitEditing={handleSearch} // 👈 MỚI: Bấm search trên bàn phím
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={handleClearSearch}>
@@ -153,39 +254,54 @@ export default function SearchScreen() {
         </View>
       </View>
 
-      {/* ❌ BỎ: Show suggestions */}
+      {/* Show suggestions when typing (Image 1) */}
+      {!showResults && (
+        <FlatList
+          data={SEARCH_SUGGESTIONS}
+          renderItem={renderSuggestion}
+          keyExtractor={(item, index) => index.toString()}
+          style={styles.suggestionsList}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
-      {/* Show results */}
+      {/* Show results with tabs (Image 2) */}
       {showResults && (
         <View style={styles.resultsContainer}>
-          {/* ❌ BỎ: Tabs */}
-
-          {/* 👈 MỚI: Hiển thị loading */}
-          {loading && (
-            <ActivityIndicator
-              size="large"
-              color="#00D9FF"
-              style={{ marginTop: 20 }}
-            />
-          )}
+          {/* Tabs */}
+          <View style={styles.tabsContainer}>
+            {tabs.map((tab) => (
+              <TouchableOpacity
+                key={tab}
+                style={[styles.tab, activeTab === tab && styles.activeTab]}
+                onPress={() => setActiveTab(tab)}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === tab && styles.activeTabText,
+                  ]}
+                >
+                  {tab}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
 
           {/* Results List */}
-          {!loading && (
-            <FlatList
-              data={results} // 👈 SỬA
-              renderItem={({ item }) => renderSongResult(item)} // 👈 SỬA
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.resultsList}
-            />
-          )}
+          <FlatList
+            data={allResults}
+            renderItem={renderSearchResult}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.resultsList}
+          />
         </View>
       )}
     </SafeAreaView>
   );
 }
 
-// ... (const styles giữ nguyên y hệt)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
