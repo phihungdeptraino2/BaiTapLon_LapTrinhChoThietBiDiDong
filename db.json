@@ -1,0 +1,166 @@
+{
+  "suggestions": [
+    {
+      "id": "1",
+      "title": "Reflection",
+      "artist": "Christina Aguilera",
+      "artworkKey": "suggestion_26"
+    },
+    {
+      "id": "2",
+      "title": "In The Stars",
+      "artist": "Benson Boone",
+      "artworkKey": "suggestion_27"
+    },
+    {
+      "id": "3",
+      "title": "In The Stars",
+      "artist": "Benson Boone",
+      "artworkKey": "suggestion_27"
+    }
+  ],
+  "charts": [
+    {
+      "id": "1",
+      "title": "Top 50",
+      "subtitle": "Canada",
+      "artwork": ["#6E16B0", "#B0168C"],
+      "imageKey": "chart_31"
+    },
+    {
+      "id": "2",
+      "title": "Top 50",
+      "subtitle": "Global",
+      "artwork": ["#16A1B0", "#16B09F"],
+      "imageKey": "chart_31"
+    },
+    {
+      "id": "3",
+      "title": "Top 50",
+      "subtitle": "Daily",
+      "artwork": ["#B06216", "#B09616"],
+      "imageKey": "chart_31"
+    }
+  ],
+  "trending_albums": [
+    {
+      "id": "1",
+      "title": "ME",
+      "artist": "Jessica Gonzalez",
+      "artworkKey": "album_45"
+    },
+    {
+      "id": "2",
+      "title": "Magna nost",
+      "artist": "Brian Thomas",
+      "artworkKey": "album_46"
+    }
+  ],
+  "popular_artists": [
+    {
+      "id": "1",
+      "name": "Jennifer Wilson",
+      "avatarKey": "artist_39"
+    },
+    {
+      "id": "2",
+      "name": "Elizabeth Hall",
+      "avatarKey": "artist_40"
+    }
+  ],
+  "playlist_top50_canada": [
+    {
+      "id": "1",
+      "title": "FLOWER",
+      "artist": "Jessica Gonzalez",
+      "duration": "3:36",
+      "plays": "2.1M",
+      "artworkKey": "album_45",
+      "audioKey": "flower"
+    },
+    {
+      "id": "2",
+      "title": "Shape of You",
+      "artist": "Anthony Taylor",
+      "duration": "03:35",
+      "plays": "68M",
+      "artworkKey": "album_46",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "3",
+      "title": "Blinding Lights",
+      "artist": "Brian Bailey",
+      "duration": "04:39",
+      "plays": "93M",
+      "artworkKey": "song_47",
+      "audioKey": "flower"
+    },
+    {
+      "id": "6",
+      "title": "Dynamite",
+      "artist": "Elena Jimenez",
+      "duration": "06:22",
+      "plays": "10M",
+      "artworkKey": "song_40",
+      "audioKey": "shape_of_you"
+    }
+  ],
+  "artist_details": {
+    "1": {
+      "id": "1",
+      "name": "Jennifer Wilson",
+      "followers": "65.1K",
+      "avatarKey": "artist_39",
+      "aboutImageKey": "artist_album_73",
+      "popular_songs": [
+        {
+          "id": "p1",
+          "title": "Let you Free",
+          "artist": "Jennifer Wilson",
+          "duration": "3:36",
+          "plays": "2.1M",
+          "artworkKey": "song_50",
+          "audioKey": "flower"
+        },
+        {
+          "id": "p2",
+          "title": "Blinding Lights",
+          "artist": "Jennifer Wilson",
+          "duration": "4:39",
+          "plays": "93M",
+          "artworkKey": "song_51",
+          "audioKey": "shape_of_you"
+        }
+      ],
+      "albums": [
+        {
+          "id": "a1",
+          "title": "ME",
+          "artist": "Jennifer Wilson",
+          "artworkKey": "artist_album_71"
+        },
+        {
+          "id": "a2",
+          "title": "Magna nost",
+          "artist": "Jennifer Wilson",
+          "artworkKey": "artist_album_72"
+        }
+      ],
+      "fans_also_like": [
+         {
+            "id": "f1",
+            "name": "Magna nost",
+            "artist": "Jessica Gonzalez",
+            "artworkKey": "fans_74"
+          },
+          {
+            "id": "f2",
+            "name": "Exercitatio",
+            "artist": "Brian Harris",
+            "artworkKey": "fans_75"
+          }
+      ]
+    }
+  }
+}

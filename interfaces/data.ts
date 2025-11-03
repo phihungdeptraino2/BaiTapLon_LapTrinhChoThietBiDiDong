@@ -5,34 +5,47 @@ export interface Song {
   id: string;
   title: string;
   artist: string;
-  artwork: any; // Dùng 'any' vì nó có thể là 'require()' hoặc { uri: '...' }
-  
-  // Sửa đổi/Thêm mới cho API
-  duration?: string;          // Giữ lại (dù ta sẽ dùng durationMillis)
-  durationMillis?: number;    // Dùng cho Player
+  artwork?: any; // SỬA: Thêm '?' (optional)
+
+  duration?: string;
+  durationMillis?: number;
   plays?: string;
-  audioUrl?: string;          // 👈 Link MP3 thật
+  audioUrl?: string;
+
+  // ✅ MỚI: Thêm các key cho json-server
+  artworkKey?: string;
+  audioKey?: string;
 }
 
 export interface Chart {
   id: string;
   title: string;
   subtitle: string;
-  artwork: any;
+  artwork: any; // Đây là mảng màu gradient
+
+  // ✅ MỚI: Key cho ảnh thật của chart
+  imageKey?: string;
 }
+
 export interface Album {
   id: string;
   title: string;
   artist: string;
-  artwork: any;
-}
+  artwork?: any; // SỬA: Thêm '?' (optional)
 
+  // ✅ MỚI: Thêm key cho ảnh album
+  artworkKey?: string;
+}
 
 export interface Artist {
   id: string;
   name: string;
-  avatar: any;
+  avatar?: any; // SỬA: Thêm '?' (optional)
+
+  // ✅ MỚI: Thêm key cho ảnh đại diện
+  avatarKey?: string;
 }
+
 export interface Playlist {
   id: string;
   title: string;

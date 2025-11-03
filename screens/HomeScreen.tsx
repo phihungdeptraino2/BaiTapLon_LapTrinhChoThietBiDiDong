@@ -1,5 +1,5 @@
 // screens/HomeScreen.tsx
-import React from "react";
+import React, { useState, useEffect } from "react"; // 👈 Thêm
 import {
   View,
   Text,
@@ -12,97 +12,59 @@ import {
   FlatList,
   StatusBar,
   ImageBackground,
+  ActivityIndicator, // 👈 Thêm
 } from "react-native";
 import { MainTabScreenProps, RootStackParamList } from "../navigation/types";
-import { Chart, Album, Artist } from "../interfaces/data";
+import { Chart, Album, Artist, Song } from "../interfaces/data"; // 👈 Thêm Song
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 
+import { API_BASE_URL } from "../config"; // 👈 Thêm
+import { AppImages, getAssetImage } from "../utils/ImageManager"; // 👈 Thêm
+
 type RootStackNavigationProp = StackNavigationProp<RootStackParamList>;
 type Props = MainTabScreenProps<"Home">;
 
-const MOCK_AVATAR = require("../assets/Home - Audio Listing/Avatar 3.png");
-
-const MOCK_SUGGESTIONS = [
-  {
-    id: "1",
-    title: "Reflection",
-    artist: "Christina Aguilera",
-    artwork: require("../assets/Home - Audio Listing/Container 26.png"),
-  },
-  {
-    id: "2",
-    title: "In The Stars",
-    artist: "Benson Boone",
-    artwork: require("../assets/Home - Audio Listing/Container 27.png"),
-  },
-  {
-    id: "3",
-    title: "In The Stars",
-    artist: "Benson Boone",
-    artwork: require("../assets/Home - Audio Listing/Container 27.png"),
-  },
-  {
-    id: "4",
-    title: "In The Stars",
-    artist: "Benson Boone",
-    artwork: require("../assets/Home - Audio Listing/Container 27.png"),
-  },
-];
-
-const MOCK_CHARTS: Chart[] = [
-  {
-    id: "1",
-    title: "Top 50",
-    subtitle: "Canada",
-    artwork: ["#6E16B0", "#B0168C"],
-  },
-  {
-    id: "2",
-    title: "Top 50",
-    subtitle: "Global",
-    artwork: ["#16A1B0", "#16B09F"],
-  },
-  {
-    id: "3",
-    title: "Top 50",
-    subtitle: "Daily",
-    artwork: ["#B06216", "#B09616"],
-  },
-];
-
-const MOCK_ALBUMS: Album[] = [
-  {
-    id: "1",
-    title: "ME",
-    artist: "Jessica Gonzalez",
-    artwork: require("../assets/Home - Audio Listing/Image 45.png"),
-  },
-  {
-    id: "2",
-    title: "Magna nost",
-    artist: "Brian Thomas",
-    artwork: require("../assets/Home - Audio Listing/Image 46.png"),
-  },
-];
-
-const MOCK_ARTISTS: Artist[] = [
-  {
-    id: "1",
-    name: "Jennifer Wilson",
-    avatar: require("../assets/Home - Audio Listing/Image 39.png"),
-  },
-  {
-    id: "2",
-    name: "Elizabeth Hall",
-    avatar: require("../assets/Home - Audio Listing/Image 40.png"),
-  },
-];
+// ❌ XÓA HẾT MOCK DATA (MOCK_SUGGESTIONS, MOCK_CHARTS, MOCK_ALBUMS, MOCK_ARTISTS)
 
 export default function HomeScreen({ navigation }: Props) {
   const rootStackNavigation = useNavigation<RootStackNavigationProp>();
+
+  // ✅ MỚI: Thêm State để lưu dữ liệu từ API
+  const [loading, setLoading] = useState(true);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [charts, setCharts] = useState<Chart[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [artists, setArtists] = useState<Artist[]>([]);
+
+  // ✅ MỚI: useEffect để gọi API
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        setLoading(true);
+        const [suggestionsRes, chartsRes, albumsRes, artistsRes] =
+          await Promise.all([
+            fetch(`${API_BASE_URL}/suggestions`),
+            fetch(`${API_BASE_URL}/charts`),
+            fetch(`${API_BASE_URL}/trending_albums`),
+            fetch(`${API_BASE_URL}/popular_artists`),
+          ]);
+
+        setSuggestions(await suggestionsRes.json());
+        setCharts(await chartsRes.json());
+        setAlbums(await albumsRes.json());
+        setArtists(await artistsRes.json());
+      } catch (error) {
+        console.error("Lỗi khi tải dữ liệu:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllData();
+  }, []); // [] = Chạy 1 lần
 
   const renderSectionHeader = (title: string) => (
     <View style={styles.sectionHeader}>
@@ -113,14 +75,11 @@ export default function HomeScreen({ navigation }: Props) {
     </View>
   );
 
-  const renderSuggestionCard = ({
-    item,
-  }: {
-    item: (typeof MOCK_SUGGESTIONS)[0];
-  }) => (
+  // ✅ SỬA: Dùng 'artworkKey'
+  const renderSuggestionCard = ({ item }: { item: any }) => (
     <TouchableOpacity style={styles.suggestionCard}>
       <ImageBackground
-        source={item.artwork}
+        source={getAssetImage(item.artworkKey)} // 👈 SỬA
         style={styles.suggestionImage}
         imageStyle={{ borderRadius: 15 }}
       >
@@ -132,14 +91,16 @@ export default function HomeScreen({ navigation }: Props) {
     </TouchableOpacity>
   );
 
-  const renderChartCard = ({ item }: { item: Chart }) => (
+  // ✅ SỬA: Dùng 'imageKey'
+  const renderChartCard = ({ item }: { item: any }) => (
     <TouchableOpacity
       style={styles.chartCard}
       onPress={() =>
         rootStackNavigation.navigate("Playlist", {
-          playlistId: item.id,
+          // Gửi ID của playlist (để PlaylistScreen tự fetch)
+          playlistId: "playlist_top50_canada", // 👈 SỬA (key này phải có trong db.json)
           title: `${item.title} - ${item.subtitle}`,
-          artwork: require("../assets/Home - Audio Listing/Container 31.png"),
+          artwork: getAssetImage(item.imageKey), // 👈 SỬA
         })
       }
     >
@@ -151,14 +112,24 @@ export default function HomeScreen({ navigation }: Props) {
     </TouchableOpacity>
   );
 
+  // ✅ SỬA: Dùng 'artworkKey'
+// ✅ SỬA: Đổi kiểu 'item' thành 'Album'
+  // và thêm '|| ""' để xử lý trường hợp 'artworkKey' có thể
+  // bị undefined
   const renderAlbumCard = ({ item }: { item: Album }) => (
     <TouchableOpacity style={styles.albumCard}>
-      <Image source={item.artwork} style={styles.albumArtwork} />
+      <Image
+        source={getAssetImage(item.artworkKey || "")} // 👈 SỬA Ở ĐÂY
+        style={styles.albumArtwork}
+      />
       <Text style={styles.albumTitle}>{item.title}</Text>
       <Text style={styles.albumArtist}>{item.artist}</Text>
     </TouchableOpacity>
   );
 
+// ✅ SỬA: Đổi kiểu 'item' thành 'Artist'
+  // và thêm '|| ""' để xử lý trường hợp 'avatarKey' có thể
+  // bị undefined
   const renderArtistCard = ({ item }: { item: Artist }) => (
     <View style={styles.artistCard}>
       <TouchableOpacity
@@ -167,12 +138,15 @@ export default function HomeScreen({ navigation }: Props) {
             artist: {
               id: item.id,
               name: item.name,
-              avatar: item.avatar,
+              avatar: getAssetImage(item.avatarKey || ""), // 👈 SỬA Ở ĐÂY
             },
           })
         }
       >
-        <Image source={item.avatar} style={styles.artistAvatar} />
+        <Image
+          source={getAssetImage(item.avatarKey || "")} // 👈 SỬA Ở ĐÂY
+          style={styles.artistAvatar}
+        />
         <Text style={styles.artistName}>{item.name}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.followButton}>
@@ -180,12 +154,25 @@ export default function HomeScreen({ navigation }: Props) {
       </TouchableOpacity>
     </View>
   );
+  // ✅ MỚI: Thêm màn hình loading
+  if (loading) {
+    return (
+      <SafeAreaView
+        style={[
+          styles.safeArea,
+          { justifyContent: "center", alignItems: "center" },
+        ]}
+      >
+        <ActivityIndicator size="large" color="#00AFFF" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* Header */}
+        {/* Header (giữ nguyên, chỉ sửa avatar) */}
         <View style={styles.header}>
           <View>
             <Text style={styles.greeting}>Good morning,</Text>
@@ -198,11 +185,11 @@ export default function HomeScreen({ navigation }: Props) {
               color="black"
               style={{ marginRight: 15 }}
             />
-            <Image source={MOCK_AVATAR} style={styles.avatar} />
+            <Image source={AppImages.avatar_3} style={styles.avatar} />
           </View>
         </View>
 
-        {/* Search Bar */}
+        {/* Search Bar (giữ nguyên) */}
         <View style={styles.searchBar}>
           <FontAwesome name="search" size={18} color="#888" />
           <TextInput
@@ -212,12 +199,12 @@ export default function HomeScreen({ navigation }: Props) {
           />
         </View>
 
-        {/* Section: Suggestions for you */}
+        {/* ✅ SỬA: Dùng state mới */}
         <Text style={[styles.sectionTitle, { marginBottom: 15 }]}>
           Suggestions for you
         </Text>
         <FlatList
-          data={MOCK_SUGGESTIONS}
+          data={suggestions}
           renderItem={renderSuggestionCard}
           keyExtractor={(item) => item.id}
           horizontal
@@ -225,10 +212,9 @@ export default function HomeScreen({ navigation }: Props) {
           contentContainerStyle={{ paddingRight: 15 }}
         />
 
-        {/* Section: Charts */}
         {renderSectionHeader("Charts")}
         <FlatList
-          data={MOCK_CHARTS}
+          data={charts}
           renderItem={renderChartCard}
           keyExtractor={(item) => item.id}
           horizontal
@@ -236,10 +222,9 @@ export default function HomeScreen({ navigation }: Props) {
           contentContainerStyle={{ paddingRight: 15 }}
         />
 
-        {/* Section: Trending albums */}
         {renderSectionHeader("Trending albums")}
         <FlatList
-          data={MOCK_ALBUMS}
+          data={albums}
           renderItem={renderAlbumCard}
           keyExtractor={(item) => item.id}
           horizontal
@@ -247,10 +232,9 @@ export default function HomeScreen({ navigation }: Props) {
           contentContainerStyle={{ paddingRight: 15 }}
         />
 
-        {/* Section: Popular artists */}
         {renderSectionHeader("Popular artists")}
         <FlatList
-          data={MOCK_ARTISTS}
+          data={artists}
           renderItem={renderArtistCard}
           keyExtractor={(item) => item.id}
           horizontal
@@ -264,6 +248,7 @@ export default function HomeScreen({ navigation }: Props) {
   );
 }
 
+// ... (const styles giữ nguyên)
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#FFFFFF" },
   container: {
