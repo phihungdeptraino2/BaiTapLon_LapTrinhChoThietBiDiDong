@@ -1,5 +1,5 @@
 // screens/PlayerScreen.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,14 +9,14 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
-} from 'react-native';
-import { RootStackScreenProps } from '../navigation/types';
-import { Ionicons, Feather } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
+} from "react-native";
+import { RootStackScreenProps } from "../navigation/types";
+import { Ionicons, Feather } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
-type Props = RootStackScreenProps<'Player'>;
+type Props = RootStackScreenProps<"Player">;
 
 export default function PlayerScreen({ navigation, route }: Props) {
   const { song } = route.params;
@@ -24,6 +24,7 @@ export default function PlayerScreen({ navigation, route }: Props) {
   const [currentTime, setCurrentTime] = useState(6); // giây
   const [duration] = useState(188); // 3:08 = 188 giây
   const [isLiked, setIsLiked] = useState(false);
+  const BACKGROUND_IMAGE = require("../assets/Play an Audio/Image 58.png");
 
   // Giả lập progress
   useEffect(() => {
@@ -42,21 +43,46 @@ export default function PlayerScreen({ navigation, route }: Props) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const progress = currentTime / duration;
+
+  // Hàm tạo Waveform Bars
+  const generateWaveform = () => {
+    const bars = 40;
+    const waveformBars = [];
+    for (let i = 0; i < bars; i++) {
+      const height = Math.random() * 25 + 35;
+      const isActive = i / bars <= progress;
+      waveformBars.push(
+        <View
+          key={i}
+          style={[
+            styles.waveformBar,
+            {
+              height: height,
+              backgroundColor: isActive ? "white" : "rgba(255,255,255,0.4)",
+            },
+          ]}
+        />
+      );
+    }
+    return waveformBars;
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <ImageBackground
-        source={song.artwork}
+        source={BACKGROUND_IMAGE}
         style={styles.background}
-        blurRadius={30}
+        // 💥 SỬA ĐỔI: XOÁ blurRadius={10} để ảnh hiển thị rõ nét
+        resizeMode="cover"
       >
         <LinearGradient
-          colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.8)']}
+          // Giữ nguyên gradient để làm tối phần dưới cho dễ đọc
+          colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.7)", "rgba(0,0,0,0.9)"]}
           style={styles.gradient}
         >
           <SafeAreaView style={styles.safeArea}>
@@ -71,19 +97,8 @@ export default function PlayerScreen({ navigation, route }: Props) {
               </TouchableOpacity>
             </View>
 
-            {/* Album Art */}
-            <View style={styles.artworkContainer}>
-              <ImageBackground
-                source={song.artwork}
-                style={styles.artwork}
-                imageStyle={styles.artworkImage}
-              >
-                <LinearGradient
-                  colors={['transparent', 'rgba(0,0,0,0.3)']}
-                  style={styles.artworkGradient}
-                />
-              </ImageBackground>
-            </View>
+            {/* View này chiếm hết không gian còn lại để đẩy nội dung xuống cuối */}
+            <View style={{ flex: 1 }} />
 
             {/* Song Info */}
             <View style={styles.infoContainer}>
@@ -91,10 +106,11 @@ export default function PlayerScreen({ navigation, route }: Props) {
               <Text style={styles.artistName}>{song.artist}</Text>
             </View>
 
-            {/* Progress Bar */}
-            <View style={styles.progressContainer}>
-              <View style={styles.progressBar}>
-                <View style={[styles.progressFill, { width: `${progress * 100}%` }]} />
+            {/* Waveform */}
+            {/* 💥 SỬA ĐỔI: Đưa margin/padding horizontal vào styles.waveformProgressRow */}
+            <View style={styles.waveformProgressRow}>
+              <View style={styles.waveformContainer}>
+                <View style={styles.waveform}>{generateWaveform()}</View>
               </View>
               <View style={styles.timeContainer}>
                 <Text style={styles.timeText}>{formatTime(currentTime)}</Text>
@@ -107,7 +123,7 @@ export default function PlayerScreen({ navigation, route }: Props) {
               <TouchableOpacity>
                 <Ionicons name="shuffle" size={24} color="white" />
               </TouchableOpacity>
-              
+
               <TouchableOpacity>
                 <Ionicons name="play-skip-back" size={36} color="white" />
               </TouchableOpacity>
@@ -117,7 +133,7 @@ export default function PlayerScreen({ navigation, route }: Props) {
                 onPress={() => setIsPlaying(!isPlaying)}
               >
                 <Ionicons
-                  name={isPlaying ? 'pause' : 'play'}
+                  name={isPlaying ? "pause" : "play"}
                   size={40}
                   color="#000"
                 />
@@ -134,14 +150,14 @@ export default function PlayerScreen({ navigation, route }: Props) {
 
             {/* Bottom Actions */}
             <View style={styles.bottomActions}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.actionButton}
                 onPress={() => setIsLiked(!isLiked)}
               >
                 <Ionicons
-                  name={isLiked ? 'heart' : 'heart-outline'}
+                  name={isLiked ? "heart" : "heart-outline"}
                   size={24}
-                  color={isLiked ? '#1ED760' : 'white'}
+                  color={isLiked ? "#1ED760" : "white"}
                 />
                 <Text style={styles.actionText}>12K</Text>
               </TouchableOpacity>
@@ -165,113 +181,110 @@ export default function PlayerScreen({ navigation, route }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
   },
   background: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   gradient: {
     flex: 1,
   },
   safeArea: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24, // Giữ nguyên padding ngang
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 15,
   },
   headerText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  artworkContainer: {
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 30,
-  },
-  artwork: {
-    width: width * 0.7,
-    height: width * 0.7,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  artworkImage: {
-    borderRadius: 12,
-  },
-  artworkGradient: {
-    flex: 1,
+    color: "white",
+    fontSize: 18,
+    fontWeight: "600",
   },
   infoContainer: {
-    alignItems: 'center',
-    marginBottom: 30,
+    alignItems: "flex-start",
+    marginBottom: 20,
+    paddingHorizontal: 4,
+    marginLeft: 10,
   },
   songTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 8,
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 6,
   },
   artistName: {
-    fontSize: 16,
-    color: 'rgba(255,255,255,0.7)',
+    fontSize: 18,
+    color: "rgba(255,255,255,0.8)",
   },
-  progressContainer: {
-    marginBottom: 30,
+
+  waveformProgressRow: {
+    marginBottom: 40,
+    // 💥 SỬA ĐỔI: THÊM paddingHorizontal để tạo margin 2 bên cho thanh nhạc
+    paddingHorizontal: 15,
   },
-  progressBar: {
-    height: 4,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    borderRadius: 2,
-    overflow: 'hidden',
+  waveformContainer: {
+    // XOÁ paddingHorizontal cũ ở đây
   },
-  progressFill: {
-    height: '100%',
-    backgroundColor: 'white',
+  waveform: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    height: 60,
+    // XOÁ paddingHorizontal cũ ở đây
+    marginBottom: 5,
+  },
+  waveformBar: {
+    width: 3,
+    borderRadius: 1,
   },
   timeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+    // XOÁ paddingHorizontal cũ ở đây
   },
   timeText: {
-    color: 'rgba(255,255,255,0.7)',
-    fontSize: 12,
+    color: "rgba(255,255,255,0.7)",
+    fontSize: 13,
   },
+
   controls: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 40,
-    paddingHorizontal: 10,
-  },
-  playButton: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bottomActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 60,
     paddingHorizontal: 20,
   },
+  playButton: {
+    width: 75,
+    height: 75,
+    borderRadius: 37.5,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bottomActions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingBottom: 20,
+  },
   actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   actionText: {
-    color: 'white',
-    fontSize: 14,
+    color: "white",
+    fontSize: 16,
+    fontWeight: "500",
   },
   shareButton: {
     padding: 10,
