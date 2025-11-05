@@ -83,10 +83,7 @@ export default function HomeScreen({ navigation }: Props) {
         style={styles.suggestionImage}
         imageStyle={{ borderRadius: 15 }}
       >
-        <View style={styles.suggestionTextOverlay}>
-          <Text style={styles.suggestionTitle}>{item.title}</Text>
-          <Text style={styles.suggestionArtist}>{item.artist}</Text>
-        </View>
+    
       </ImageBackground>
     </TouchableOpacity>
   );
@@ -175,6 +172,11 @@ export default function HomeScreen({ navigation }: Props) {
         {/* Header (giữ nguyên, chỉ sửa avatar) */}
         <View style={styles.header}>
           <View>
+           <Image 
+        source={require('../assets/Home - Audio Listing/Image 36.png')} 
+        style={{width : 100,height:50}}
+        resizeMode="contain" // Cần thêm style để định rõ kích thước
+    />
             <Text style={styles.greeting}>Good morning,</Text>
             <Text style={styles.userName}>Ashley Scott</Text>
           </View>
