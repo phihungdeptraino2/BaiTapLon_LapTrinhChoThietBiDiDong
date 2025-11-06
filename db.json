@@ -162,5 +162,293 @@
           }
       ]
     }
-  }
+  },
+  "search_artists": [
+    {
+      "id": "1",
+      "name": "Mer Watson",
+      "followers": "1.234K Followers",
+      "avatarKey": "search_artist_101",
+      "type": "artist"
+    }
+  ],
+  "search_songs": [
+    {
+      "id": "2",
+      "title": "Me",
+      "artist": "Jessica Gonzalez",
+      "plays": "2.1M",
+      "duration": "3:36",
+      "artworkKey": "search_song_102",
+      "type": "song",
+      "audioKey": "flower"
+    },
+    {
+      "id": "3",
+      "title": "Me Inc",
+      "artist": "Anthony Taylor",
+      "plays": "68M",
+      "duration": "03:35",
+      "artworkKey": "search_song_103",
+      "type": "song",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "4",
+      "title": "Dozz me",
+      "artist": "Brian Bailey",
+      "plays": "93M",
+      "duration": "04:39",
+      "artworkKey": "search_song_104",
+      "type": "song",
+      "audioKey": "flower"
+    },
+    {
+      "id": "5",
+      "title": "Eastss me",
+      "artist": "Anthony Taylor",
+      "plays": "9M",
+      "duration": "07:48",
+      "artworkKey": "search_song_105",
+      "type": "song",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "6",
+      "title": "Me Ali",
+      "artist": "Pedro Moreno",
+      "plays": "23M",
+      "duration": "3:36",
+      "artworkKey": "search_song_106",
+      "type": "song",
+      "audioKey": "flower"
+    },
+    {
+      "id": "7",
+      "title": "Me quis a",
+      "artist": "Elena Jimenez",
+      "plays": "10M",
+      "duration": "06:22",
+      "artworkKey": "search_song_107",
+      "type": "song",
+      "audioKey": "shape_of_you"
+    }
+  ],
+  "artists": [
+    {
+      "id": "artist_1",
+      "name": "Jennifer Wilson",
+      "avatarKey": "artist_39",
+      "followers": "65.1K"
+    },
+    {
+      "id": "artist_2",
+      "name": "Elizabeth Hall",
+      "avatarKey": "artist_40",
+      "followers": "12.3K"
+    },
+    {
+      "id": "artist_3",
+      "name": "Mer Watson",
+      "followers": "1.234K",
+      "avatarKey": "search_artist_101"
+    },
+    {
+      "id": "artist_4",
+      "name": "Jessica Gonzalez",
+      "avatarKey": "album_45",
+      "followers": "2.1M"
+    },
+    {
+      "id": "artist_5",
+      "name": "Anthony Taylor",
+      "avatarKey": "album_46",
+      "followers": "68M"
+    },
+    {
+      "id": "artist_6",
+      "name": "Brian Bailey",
+      "avatarKey": "song_47",
+      "followers": "93M"
+    },
+    {
+      "id": "artist_7",
+      "name": "Pedro Moreno",
+      "avatarKey": "search_song_106",
+      "followers": "23M"
+    },
+    {
+      "id": "artist_8",
+      "name": "Elena Jimenez",
+      "avatarKey": "search_song_107",
+      "followers": "10M"
+    },
+    {
+      "id": "artist_9",
+      "name": "Christina Aguilera",
+      "avatarKey": "suggestion_26",
+      "followers": "5.5M"
+    },
+    {
+      "id": "artist_10",
+      "name": "Benson Boone",
+      "avatarKey": "suggestion_27",
+      "followers": "3.2M"
+    }
+  ],
+  "albums": [
+    {
+      "id": "album_1",
+      "title": "ME",
+      "artist": "Jessica Gonzalez",
+      "artworkKey": "album_45"
+    },
+    {
+      "id": "album_2",
+      "title": "Magna nost",
+      "artist": "Brian Thomas",
+      "artworkKey": "album_46"
+    },
+    {
+      "id": "album_3",
+      "title": "ME",
+      "artist": "Jennifer Wilson",
+      "artworkKey": "artist_album_71"
+    },
+    {
+      "id": "album_4",
+      "title": "Magna nost",
+      "artist": "Jennifer Wilson",
+      "artworkKey": "artist_album_72"
+    }
+  ],
+  "songs": [
+    {
+      "id": "song_1",
+      "title": "FLOWER",
+      "artist": "Jessica Gonzalez",
+      "duration": "3:36",
+      "plays": "2.1M",
+      "artworkKey": "album_45",
+      "audioKey": "flower"
+    },
+    {
+      "id": "song_2",
+      "title": "Shape of You",
+      "artist": "Anthony Taylor",
+      "duration": "03:35",
+      "plays": "68M",
+      "artworkKey": "album_46",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "song_3",
+      "title": "Blinding Lights",
+      "artist": "Brian Bailey",
+      "duration": "04:39",
+      "plays": "93M",
+      "artworkKey": "song_47",
+      "audioKey": "flower"
+    },
+    {
+      "id": "song_4",
+      "title": "Dynamite",
+      "artist": "Elena Jimenez",
+      "duration": "06:22",
+      "plays": "10M",
+      "artworkKey": "song_40",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "song_5",
+      "title": "Let you Free",
+      "artist": "Jennifer Wilson",
+      "duration": "3:36",
+      "plays": "2.1M",
+      "artworkKey": "song_50",
+      "audioKey": "flower"
+    },
+    {
+      "id": "song_6",
+      "title": "Blinding Lights",
+      "artist": "Jennifer Wilson",
+      "duration": "4:39",
+      "plays": "93M",
+      "artworkKey": "song_51",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "song_7",
+      "title": "Me",
+      "artist": "Jessica Gonzalez",
+      "plays": "2.1M",
+      "duration": "3:36",
+      "artworkKey": "search_song_102",
+      "audioKey": "flower"
+    },
+    {
+      "id": "song_8",
+      "title": "Me Inc",
+      "artist": "Anthony Taylor",
+      "plays": "68M",
+      "duration": "03:35",
+      "artworkKey": "search_song_103",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "song_9",
+      "title": "Dozz me",
+      "artist": "Brian Bailey",
+      "plays": "93M",
+      "duration": "04:39",
+      "artworkKey": "search_song_104",
+      "audioKey": "flower"
+    },
+    {
+      "id": "song_10",
+      "title": "Eastss me",
+      "artist": "Anthony Taylor",
+      "plays": "9M",
+      "duration": "07:48",
+      "artworkKey": "search_song_105",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "song_11",
+      "title": "Me Ali",
+      "artist": "Pedro Moreno",
+      "plays": "23M",
+      "duration": "3:36",
+      "artworkKey": "search_song_106",
+      "audioKey": "flower"
+    },
+    {
+      "id": "song_12",
+      "title": "Me quis a",
+      "artist": "Elena Jimenez",
+      "plays": "10M",
+      "duration": "06:22",
+      "artworkKey": "search_song_107",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "song_13",
+      "title": "Reflection",
+      "artist": "Christina Aguilera",
+      "duration": "03:45",
+      "plays": "1.2M",
+      "artworkKey": "suggestion_26",
+      "audioKey": "flower"
+    },
+    {
+      "id": "song_14",
+      "title": "In The Stars",
+      "artist": "Benson Boone",
+      "duration": "03:50",
+      "plays": "4.8M",
+      "artworkKey": "suggestion_27",
+      "audioKey": "shape_of_you"
+    }
+  ]
+
 }

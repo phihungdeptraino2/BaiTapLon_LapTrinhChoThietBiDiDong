@@ -44,6 +44,7 @@ export interface Artist {
 
   // ✅ MỚI: Thêm key cho ảnh đại diện
   avatarKey?: string;
+  followers?: string;
 }
 
 export interface Playlist {
