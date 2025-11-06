@@ -1,4 +1,4 @@
-// screens/PlayerScreen.tsx
+// screens/PlayerScreen.tsx (Đã nâng cấp Audio)
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -9,10 +9,17 @@ import {
   TouchableOpacity,
   StatusBar,
   Dimensions,
+  ActivityIndicator, // ✅ THÊM
 } from "react-native";
 import { RootStackScreenProps } from "../navigation/types";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+
+// ✅ 1. Import Audio từ expo-av
+import { Audio } from "expo-av";
+// ✅ 2. Import hàm quản lý audio
+import { getAssetAudio } from "../utils/AudioManager";
+import { getAssetImage } from "../utils/ImageManager"; // ✅ Import ImageManager
 
 const { width, height } = Dimensions.get("window");
 
@@ -20,39 +27,116 @@ type Props = RootStackScreenProps<"Player">;
 
 export default function PlayerScreen({ navigation, route }: Props) {
   const { song } = route.params;
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [currentTime, setCurrentTime] = useState(6); // giây
-  const [duration] = useState(188); // 3:08 = 188 giây
+
+  // ✅ 3. Thêm state cho 'sound object' và 'loading'
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // ✅ 4. Sửa state mặc định
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0); // Bắt đầu từ 0
+  const [duration, setDuration] = useState(1); // Bắt đầu từ 1 (tránh lỗi chia cho 0)
   const [isLiked, setIsLiked] = useState(false);
-  const BACKGROUND_IMAGE = require("../assets/Play an Audio/Image 58.png");
 
-  // Giả lập progress
+  // ✅ 5. Lấy ảnh nền động từ 'song.artworkKey'
+  const BACKGROUND_IMAGE = getAssetImage(song.artworkKey ?? "");
+
+  // ✅ 6. XÓA BỎ useEffect GIẢ LẬP CŨ
+
+  // ✅ 7. useEffect để TẢI VÀ PHÁT NHẠC khi component được mở
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setCurrentTime((prev) => {
-          if (prev >= duration) return 0;
-          return prev + 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, duration]);
+    const loadSound = async () => {
+      setIsLoading(true);
+      
+      // Lấy đường dẫn file audio từ AudioManager
+      const audioAsset = getAssetAudio(song.audioKey);
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+      if (!audioAsset) {
+        console.error("Không tìm thấy file audio cho key:", song.audioKey);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        // Cấu hình audio
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          playsInSilentModeIOS: true,
+          shouldDuckAndroid: true,
+          staysActiveInBackground: true, // Cho phép phát nhạc nền
+          playThroughEarpieceAndroid: false,
+        });
+
+        // Tải file nhạc
+        const { sound } = await Audio.Sound.createAsync(
+          audioAsset,
+          { shouldPlay: true } // Yêu cầu phát ngay sau khi tải
+        );
+        
+        setSound(sound);
+        setIsPlaying(true);
+
+        // ✅ 8. CẬP NHẬT TRẠNG THÁI (Progress bar thật)
+        sound.setOnPlaybackStatusUpdate((status) => {
+          if (status.isLoaded) {
+            setIsPlaying(status.isPlaying);
+            setDuration(status.durationMillis || 1);
+            setCurrentTime(status.positionMillis || 0);
+
+            // Tự động phát lại khi hết bài (tùy chọn)
+            if (status.didJustFinish) {
+              sound.replayAsync();
+            }
+          }
+        });
+        
+      } catch (error) {
+        console.error("Lỗi khi tải sound:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadSound();
+
+    // ✅ 9. Cleanup: Dỡ tải (unload) file nhạc khi thoát màn hình
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [song.audioKey]); // Chỉ chạy lại khi bài hát thay đổi
+
+  // ✅ 10. Sửa hàm formatTime (giờ chúng ta dùng mili-giây)
+  const formatTime = (millis: number) => {
+    const totalSeconds = millis / 1000;
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = Math.floor(totalSeconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const progress = currentTime / duration;
+  const progress = duration > 1 ? currentTime / duration : 0;
 
-  // Hàm tạo Waveform Bars
+  // ✅ 11. Hàm Play/Pause mới
+  const onPlayPausePress = async () => {
+    if (!sound) return;
+
+    if (isPlaying) {
+      await sound.pauseAsync();
+    } else {
+      await sound.playAsync();
+    }
+    // State isPlaying sẽ tự động cập nhật nhờ 'setOnPlaybackStatusUpdate'
+  };
+
+  // Hàm tạo Waveform (giữ nguyên)
   const generateWaveform = () => {
     const bars = 40;
     const waveformBars = [];
     for (let i = 0; i < bars; i++) {
+      // (Bạn có thể làm thanh sóng "thật" bằng cách phân tích
+      // dữ liệu âm thanh, nhưng random vẫn ổn cho bài tập)
       const height = Math.random() * 25 + 35;
       const isActive = i / bars <= progress;
       waveformBars.push(
@@ -70,23 +154,30 @@ export default function PlayerScreen({ navigation, route }: Props) {
     }
     return waveformBars;
   };
+  
+  // ✅ 12. Thêm màn hình Loading
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#FFF" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <ImageBackground
-        source={BACKGROUND_IMAGE}
+        source={BACKGROUND_IMAGE} // ✅ Đã dùng ảnh động
         style={styles.background}
-        // 💥 SỬA ĐỔI: XOÁ blurRadius={10} để ảnh hiển thị rõ nét
         resizeMode="cover"
       >
         <LinearGradient
-          // Giữ nguyên gradient để làm tối phần dưới cho dễ đọc
           colors={["rgba(0,0,0,0.1)", "rgba(0,0,0,0.7)", "rgba(0,0,0,0.9)"]}
           style={styles.gradient}
         >
           <SafeAreaView style={styles.safeArea}>
-            {/* Header */}
+            {/* Header (giữ nguyên) */}
             <View style={styles.header}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Ionicons name="chevron-down" size={32} color="white" />
@@ -97,28 +188,27 @@ export default function PlayerScreen({ navigation, route }: Props) {
               </TouchableOpacity>
             </View>
 
-            {/* View này chiếm hết không gian còn lại để đẩy nội dung xuống cuối */}
             <View style={{ flex: 1 }} />
 
-            {/* Song Info */}
+            {/* Song Info (giữ nguyên) */}
             <View style={styles.infoContainer}>
               <Text style={styles.songTitle}>{song.title}</Text>
               <Text style={styles.artistName}>{song.artist}</Text>
             </View>
 
-            {/* Waveform */}
-            {/* 💥 SỬA ĐỔI: Đưa margin/padding horizontal vào styles.waveformProgressRow */}
+            {/* Waveform (giữ nguyên, giờ nó sẽ chạy bằng data thật) */}
             <View style={styles.waveformProgressRow}>
               <View style={styles.waveformContainer}>
                 <View style={styles.waveform}>{generateWaveform()}</View>
               </View>
               <View style={styles.timeContainer}>
+                {/* ✅ Dùng state thật */}
                 <Text style={styles.timeText}>{formatTime(currentTime)}</Text>
                 <Text style={styles.timeText}>{formatTime(duration)}</Text>
               </View>
             </View>
 
-            {/* Controls */}
+            {/* Controls (giữ nguyên) */}
             <View style={styles.controls}>
               <TouchableOpacity>
                 <Ionicons name="shuffle" size={24} color="white" />
@@ -128,9 +218,10 @@ export default function PlayerScreen({ navigation, route }: Props) {
                 <Ionicons name="play-skip-back" size={36} color="white" />
               </TouchableOpacity>
 
+              {/* ✅ 13. Kết nối hàm Play/Pause thật */}
               <TouchableOpacity
                 style={styles.playButton}
-                onPress={() => setIsPlaying(!isPlaying)}
+                onPress={onPlayPausePress}
               >
                 <Ionicons
                   name={isPlaying ? "pause" : "play"}
@@ -148,7 +239,7 @@ export default function PlayerScreen({ navigation, route }: Props) {
               </TouchableOpacity>
             </View>
 
-            {/* Bottom Actions */}
+            {/* Bottom Actions (giữ nguyên) */}
             <View style={styles.bottomActions}>
               <TouchableOpacity
                 style={styles.actionButton}
@@ -178,6 +269,7 @@ export default function PlayerScreen({ navigation, route }: Props) {
   );
 }
 
+// ... (const styles giữ nguyên)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -225,18 +317,14 @@ const styles = StyleSheet.create({
 
   waveformProgressRow: {
     marginBottom: 40,
-    // 💥 SỬA ĐỔI: THÊM paddingHorizontal để tạo margin 2 bên cho thanh nhạc
     paddingHorizontal: 15,
   },
-  waveformContainer: {
-    // XOÁ paddingHorizontal cũ ở đây
-  },
+  waveformContainer: {},
   waveform: {
     flexDirection: "row",
     alignItems: "flex-end",
     justifyContent: "space-between",
     height: 60,
-    // XOÁ paddingHorizontal cũ ở đây
     marginBottom: 5,
   },
   waveformBar: {
@@ -247,7 +335,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10,
-    // XOÁ paddingHorizontal cũ ở đây
   },
   timeText: {
     color: "rgba(255,255,255,0.7)",

@@ -1,19 +1,17 @@
 // utils/AudioManager.ts
 
-/**
- * ⚠️ QUAN TRỌNG: ĐÂY CHỈ LÀ VÍ DỤ!
- * * 1. Tạo thư mục /assets/audio/
- * 2. Copy file nhạc (ví dụ: 'flower.mp3') của bạn vào đó.
- * 3. Sửa lại các dòng 'require' bên dưới cho đúng với tên file của bạn.
- * * Tên key (ví dụ: 'flower') phải khớp với 'audioKey'
- * trong file 'db.json' của bạn.
- */
-export const AppAudio = {
-  // --- VÍ DỤ ---
-  // Sửa lại 2 dòng này
-//   flower: require('../assets/audio/flower.mp3'),
-//   shape_of_you: require('../assets/audio/shape_of_you.mp3'),
+// 1. Định nghĩa các key (phải khớp với 'audioKey' trong db.json)
+// và 'require' file nhạc tương ứng.
+const AppAudios = {
+  flower: require("../assets/audio/music1.mp3"),
+  shape_of_you: require("../assets/audio/music2.mp3"),
 
-  // Thêm các file nhạc khác của bạn ở đây
-  // vi_du: require('../assets/audio/ten_file_nhac.mp3'),
+  // ✅ BỔ SUNG: Thêm các file nhạc khác của bạn ở đây
+  // ten_key_trong_db_json: require('../assets/audio/ten_file.mp3'),
+};
+
+// 2. Hàm tiện ích để lấy file audio một cách an toàn
+export const getAssetAudio = (key?: string) => {
+  if (!key) return null;
+  return AppAudios[key as keyof typeof AppAudios] || null;
 };

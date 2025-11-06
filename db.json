@@ -4,19 +4,22 @@
       "id": "1",
       "title": "Reflection",
       "artist": "Christina Aguilera",
-      "artworkKey": "suggestion_26"
+      "artworkKey": "suggestion_26",
+      "audioKey": "flower"
     },
     {
       "id": "2",
       "title": "In The Stars",
       "artist": "Benson Boone",
-      "artworkKey": "suggestion_27"
+      "artworkKey": "suggestion_27",
+      "audioKey": "shape_of_you"
     },
     {
       "id": "3",
       "title": "In The Stars",
       "artist": "Benson Boone",
-      "artworkKey": "suggestion_27"
+      "artworkKey": "suggestion_27",
+      "audioKey": "shape_of_you"
     }
   ],
   "charts": [
@@ -24,21 +27,30 @@
       "id": "1",
       "title": "Top 50",
       "subtitle": "Canada",
-      "artwork": ["#6E16B0", "#B0168C"],
+      "artwork": [
+        "#6E16B0",
+        "#B0168C"
+      ],
       "imageKey": "chart_31"
     },
     {
       "id": "2",
       "title": "Top 50",
       "subtitle": "Global",
-      "artwork": ["#16A1B0", "#16B09F"],
+      "artwork": [
+        "#16A1B0",
+        "#16B09F"
+      ],
       "imageKey": "chart_31"
     },
     {
       "id": "3",
       "title": "Top 50",
       "subtitle": "Daily",
-      "artwork": ["#B06216", "#B09616"],
+      "artwork": [
+        "#B06216",
+        "#B09616"
+      ],
       "imageKey": "chart_31"
     }
   ],
@@ -148,18 +160,18 @@
         }
       ],
       "fans_also_like": [
-         {
-            "id": "f1",
-            "name": "Magna nost",
-            "artist": "Jessica Gonzalez",
-            "artworkKey": "fans_74"
-          },
-          {
-            "id": "f2",
-            "name": "Exercitatio",
-            "artist": "Brian Harris",
-            "artworkKey": "fans_75"
-          }
+        {
+          "id": "f1",
+          "name": "Magna nost",
+          "artist": "Jessica Gonzalez",
+          "artworkKey": "fans_74"
+        },
+        {
+          "id": "f2",
+          "name": "Exercitatio",
+          "artist": "Brian Harris",
+          "artworkKey": "fans_75"
+        }
       ]
     }
   },
@@ -450,5 +462,4 @@
       "audioKey": "shape_of_you"
     }
   ]
-
 }
