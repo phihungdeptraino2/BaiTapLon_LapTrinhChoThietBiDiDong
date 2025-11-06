@@ -1,5 +1,5 @@
-// screens/HomeScreen.tsx
-import React, { useState, useEffect } from "react"; // 👈 Thêm
+// screens/HomeScreen.tsx (Đã sửa lỗi)
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,29 +12,28 @@ import {
   FlatList,
   StatusBar,
   ImageBackground,
-  ActivityIndicator, // 👈 Thêm
+  ActivityIndicator,
 } from "react-native";
 import { MainTabScreenProps, RootStackParamList } from "../navigation/types";
-import { Chart, Album, Artist, Song } from "../interfaces/data"; // 👈 Thêm Song
+import { Chart, Album, Artist, Song } from "../interfaces/data"; // 👈 Đảm bảo Song đã được import
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { API_BASE_URL } from "../config"; // 👈 Thêm
-import { AppImages, getAssetImage } from "../utils/ImageManager"; // 👈 Thêm
+import { API_BASE_URL } from "../config";
+import { AppImages, getAssetImage } from "../utils/ImageManager";
 
 type RootStackNavigationProp = StackNavigationProp<RootStackParamList>;
 type Props = MainTabScreenProps<"Home">;
-
-// ❌ XÓA HẾT MOCK DATA (MOCK_SUGGESTIONS, MOCK_CHARTS, MOCK_ALBUMS, MOCK_ARTISTS)
 
 export default function HomeScreen({ navigation }: Props) {
   const rootStackNavigation = useNavigation<RootStackNavigationProp>();
 
   // ✅ MỚI: Thêm State để lưu dữ liệu từ API
   const [loading, setLoading] = useState(true);
-  const [suggestions, setSuggestions] = useState<any[]>([]);
+  // ✅ SỬA 1: Dùng kiểu Song[] thay vì any[] để code an toàn hơn
+  const [suggestions, setSuggestions] = useState<Song[]>([]);
   const [charts, setCharts] = useState<Chart[]>([]);
   const [albums, setAlbums] = useState<Album[]>([]);
   const [artists, setArtists] = useState<Artist[]>([]);
@@ -76,10 +75,19 @@ export default function HomeScreen({ navigation }: Props) {
   );
 
   // ✅ SỬA: Dùng 'artworkKey'
-  const renderSuggestionCard = ({ item }: { item: any }) => (
-    <TouchableOpacity style={styles.suggestionCard}>
+  const renderSuggestionCard = ({ song }: { song: Song }) => (
+    <TouchableOpacity style={styles.suggestionCard} 
+    onPress={()=>
+        rootStackNavigation.navigate("Player", {
+        song,
+        
+      })
+
+    }
+    >
       <ImageBackground
-        source={getAssetImage(item.artworkKey)} // 👈 SỬA
+        // ✅ SỬA 2: Thêm '?? ""' để xử lý lỗi 'undefined' (lỗi trong ảnh)
+        source={getAssetImage(song.artworkKey ?? "")} 
         style={styles.suggestionImage}
         imageStyle={{ borderRadius: 15 }}
       >
@@ -113,10 +121,14 @@ export default function HomeScreen({ navigation }: Props) {
 // ✅ SỬA: Đổi kiểu 'item' thành 'Album'
   // và thêm '|| ""' để xử lý trường hợp 'artworkKey' có thể
   // bị undefined
-  const renderAlbumCard = ({ item }: { item: Album }) => (
-    <TouchableOpacity style={styles.albumCard}>
+const renderAlbumCard = ({ item }: { item: Album }) => (
+    // ✅ THÊM onPress VÀO ĐÂY
+    <TouchableOpacity 
+      style={styles.albumCard}
+      onPress={() => rootStackNavigation.navigate("SubscriptionPlans")}
+    >
       <Image
-        source={getAssetImage(item.artworkKey || "")} // 👈 SỬA Ở ĐÂY
+        source={getAssetImage(item.artworkKey || "")} 
         style={styles.albumArtwork}
       />
       <Text style={styles.albumTitle}>{item.title}</Text>
@@ -172,10 +184,10 @@ export default function HomeScreen({ navigation }: Props) {
         {/* Header (giữ nguyên, chỉ sửa avatar) */}
         <View style={styles.header}>
           <View>
-           <Image 
-        source={require('../assets/Home - Audio Listing/Image 36.png')} 
-        style={{width : 100,height:50}}
-        resizeMode="contain" // Cần thêm style để định rõ kích thước
+            <Image 
+          source={require('../assets/Home - Audio Listing/Image 36.png')} 
+          style={{width : 100,height:50}}
+          resizeMode="contain" // Cần thêm style để định rõ kích thước
     />
             <Text style={styles.greeting}>Good morning,</Text>
             <Text style={styles.userName}>Ashley Scott</Text>
@@ -207,7 +219,8 @@ export default function HomeScreen({ navigation }: Props) {
         </Text>
         <FlatList
           data={suggestions}
-          renderItem={renderSuggestionCard}
+          // ✅ SỬA 3: Sửa lại cách truyền 'item' vào hàm (sửa lỗi logic)
+          renderItem={({ item }) => renderSuggestionCard({ song: item })}
           keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}

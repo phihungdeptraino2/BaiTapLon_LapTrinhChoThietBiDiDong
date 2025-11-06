@@ -28,7 +28,7 @@ export type RootStackParamList = {
   };
   Player: {
     song: Song;
-    playlist: Song[];
+    playlist?: Song[];
   };
   Artist: {
     artist: {

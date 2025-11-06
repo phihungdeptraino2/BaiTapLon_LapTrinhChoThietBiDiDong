@@ -90,7 +90,7 @@ export default function PlaylistScreen({ navigation, route }: Props) {
   const handleSongPress = (song: Song) => {
     navigation.navigate("Player", {
       song,
-      playlist: MOCK_SONGS,
+      // playlist: MOCK_SONGS,
     });
   };
 
