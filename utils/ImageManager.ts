@@ -14,6 +14,9 @@ export const AppImages = {
   suggestion_26: require('../assets/Home - Audio Listing/Container 26.png'),
   suggestion_27: require('../assets/Home - Audio Listing/Container 27.png'),
   chart_31: require('../assets/Home - Audio Listing/Container 31.png'),
+  chart_32: require('../assets/Home - Audio Listing/Container 32.png'),
+  chart_33: require('../assets/Home - Audio Listing/Container 33.png'),
+
   album_45: require('../assets/Home - Audio Listing/Image 45.png'),
   album_46: require('../assets/Home - Audio Listing/Image 46.png'),
   artist_39: require('../assets/Home - Audio Listing/Image 39.png'),

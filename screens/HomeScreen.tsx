@@ -1,4 +1,4 @@
-// screens/HomeScreen.tsx (Đã sửa lỗi)
+// screens/HomeScreen.tsx (Code hoàn chỉnh)
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -15,7 +15,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { MainTabScreenProps, RootStackParamList } from "../navigation/types";
-import { Chart, Album, Artist, Song } from "../interfaces/data"; // 👈 Đảm bảo Song đã được import
+import { Chart, Album, Artist, Song } from "../interfaces/data";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -30,15 +30,12 @@ type Props = MainTabScreenProps<"Home">;
 export default function HomeScreen({ navigation }: Props) {
   const rootStackNavigation = useNavigation<RootStackNavigationProp>();
 
-  // ✅ MỚI: Thêm State để lưu dữ liệu từ API
   const [loading, setLoading] = useState(true);
-  // ✅ SỬA 1: Dùng kiểu Song[] thay vì any[] để code an toàn hơn
   const [suggestions, setSuggestions] = useState<Song[]>([]);
   const [charts, setCharts] = useState<Chart[]>([]);
   const [albums, setAlbums] = useState<Album[]>([]);
   const [artists, setArtists] = useState<Artist[]>([]);
 
-  // ✅ MỚI: useEffect để gọi API
   useEffect(() => {
     const fetchAllData = async () => {
       try {
@@ -63,7 +60,7 @@ export default function HomeScreen({ navigation }: Props) {
     };
 
     fetchAllData();
-  }, []); // [] = Chạy 1 lần
+  }, []);
 
   const renderSectionHeader = (title: string) => (
     <View style={styles.sectionHeader}>
@@ -74,61 +71,53 @@ export default function HomeScreen({ navigation }: Props) {
     </View>
   );
 
-  // ✅ SỬA: Dùng 'artworkKey'
   const renderSuggestionCard = ({ song }: { song: Song }) => (
-    <TouchableOpacity style={styles.suggestionCard} 
-    onPress={()=>
+    <TouchableOpacity
+      style={styles.suggestionCard}
+      onPress={() =>
         rootStackNavigation.navigate("Player", {
-        song,
-        
-      })
-
-    }
+          song,
+        })
+      }
     >
       <ImageBackground
-        // ✅ SỬA 2: Thêm '?? ""' để xử lý lỗi 'undefined' (lỗi trong ảnh)
-        source={getAssetImage(song.artworkKey ?? "")} 
+        source={getAssetImage(song.artworkKey ?? "")}
         style={styles.suggestionImage}
         imageStyle={{ borderRadius: 15 }}
-      >
-    
-      </ImageBackground>
+      ></ImageBackground>
     </TouchableOpacity>
   );
 
-  // ✅ SỬA: Dùng 'imageKey'
   const renderChartCard = ({ item }: { item: any }) => (
     <TouchableOpacity
       style={styles.chartCard}
       onPress={() =>
         rootStackNavigation.navigate("Playlist", {
-          // Gửi ID của playlist (để PlaylistScreen tự fetch)
-          playlistId: "my_awesome_playlist", // 👈 SỬA (key này phải có trong db.json)
+          playlistId: "my_awesome_playlist",
           title: `${item.title} - ${item.subtitle}`,
-          artwork: getAssetImage(item.imageKey), // 👈 SỬA
+          artwork: getAssetImage(item.imageKey),
         })
       }
     >
-      <LinearGradient colors={item.artwork} style={styles.chartGradient}>
-        <Text style={styles.chartTitle}>{item.title}</Text>
-        <Text style={styles.chartSubtitle}>{item.subtitle}</Text>
-      </LinearGradient>
+      <ImageBackground
+        source={getAssetImage(item.imageKey ?? "")}
+        style={styles.chartImage}
+        imageStyle={{ borderRadius: 15 }}
+        resizeMode="cover"
+      >
+       
+      </ImageBackground>
       <Text style={styles.chartDescription}>Daily chart-toppers update</Text>
     </TouchableOpacity>
   );
 
-  // ✅ SỬA: Dùng 'artworkKey'
-// ✅ SỬA: Đổi kiểu 'item' thành 'Album'
-  // và thêm '|| ""' để xử lý trường hợp 'artworkKey' có thể
-  // bị undefined
-const renderAlbumCard = ({ item }: { item: Album }) => (
-    // ✅ THÊM onPress VÀO ĐÂY
-    <TouchableOpacity 
+  const renderAlbumCard = ({ item }: { item: Album }) => (
+    <TouchableOpacity
       style={styles.albumCard}
       onPress={() => rootStackNavigation.navigate("SubscriptionPlans")}
     >
       <Image
-        source={getAssetImage(item.artworkKey || "")} 
+        source={getAssetImage(item.artworkKey || "")}
         style={styles.albumArtwork}
       />
       <Text style={styles.albumTitle}>{item.title}</Text>
@@ -136,9 +125,6 @@ const renderAlbumCard = ({ item }: { item: Album }) => (
     </TouchableOpacity>
   );
 
-// ✅ SỬA: Đổi kiểu 'item' thành 'Artist'
-  // và thêm '|| ""' để xử lý trường hợp 'avatarKey' có thể
-  // bị undefined
   const renderArtistCard = ({ item }: { item: Artist }) => (
     <View style={styles.artistCard}>
       <TouchableOpacity
@@ -147,13 +133,13 @@ const renderAlbumCard = ({ item }: { item: Album }) => (
             artist: {
               id: item.id,
               name: item.name,
-              avatar: getAssetImage(item.avatarKey || ""), // 👈 SỬA Ở ĐÂY
+              avatar: getAssetImage(item.avatarKey || ""),
             },
           })
         }
       >
         <Image
-          source={getAssetImage(item.avatarKey || "")} // 👈 SỬA Ở ĐÂY
+          source={getAssetImage(item.avatarKey || "")}
           style={styles.artistAvatar}
         />
         <Text style={styles.artistName}>{item.name}</Text>
@@ -163,7 +149,7 @@ const renderAlbumCard = ({ item }: { item: Album }) => (
       </TouchableOpacity>
     </View>
   );
-  // ✅ MỚI: Thêm màn hình loading
+
   if (loading) {
     return (
       <SafeAreaView
@@ -181,14 +167,13 @@ const renderAlbumCard = ({ item }: { item: Album }) => (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* Header (giữ nguyên, chỉ sửa avatar) */}
         <View style={styles.header}>
           <View>
-            <Image 
-          source={require('../assets/Home - Audio Listing/Image 36.png')} 
-          style={{width : 100,height:50}}
-          resizeMode="contain" // Cần thêm style để định rõ kích thước
-    />
+            <Image
+              source={require("../assets/Home - Audio Listing/Image 36.png")}
+              style={{ width: 100, height: 50 }}
+              resizeMode="contain"
+            />
             <Text style={styles.greeting}>Good morning,</Text>
             <Text style={styles.userName}>Ashley Scott</Text>
           </View>
@@ -203,7 +188,6 @@ const renderAlbumCard = ({ item }: { item: Album }) => (
           </View>
         </View>
 
-        {/* Search Bar (giữ nguyên) */}
         <View style={styles.searchBar}>
           <FontAwesome name="search" size={18} color="#888" />
           <TextInput
@@ -213,13 +197,11 @@ const renderAlbumCard = ({ item }: { item: Album }) => (
           />
         </View>
 
-        {/* ✅ SỬA: Dùng state mới */}
         <Text style={[styles.sectionTitle, { marginBottom: 15 }]}>
           Suggestions for you
         </Text>
         <FlatList
           data={suggestions}
-          // ✅ SỬA 3: Sửa lại cách truyền 'item' vào hàm (sửa lỗi logic)
           renderItem={({ item }) => renderSuggestionCard({ song: item })}
           keyExtractor={(item) => item.id}
           horizontal
@@ -263,7 +245,6 @@ const renderAlbumCard = ({ item }: { item: Album }) => (
   );
 }
 
-// ... (const styles giữ nguyên)
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#FFFFFF" },
   container: {
@@ -317,46 +298,49 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "flex-end",
   },
-  suggestionTextOverlay: {
-    padding: 10,
-    backgroundColor: "rgba(0,0,0,0.2)",
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-  },
-  suggestionTitle: {
-    color: "#FFF",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  suggestionArtist: {
-    color: "#FFF",
-    fontSize: 14,
-  },
 
+  // ✅ STYLES CHO CHARTS
   chartCard: {
-    width: 140,
+    width: 150,
     marginRight: 15,
   },
-  chartGradient: {
-    width: 140,
-    height: 140,
-    borderRadius: 15,
+  chartImage: {
+    width: 150,
+    height: 150,
     justifyContent: "center",
-    padding: 10,
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  chartOverlay: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
+    borderRadius: 20,
   },
   chartTitle: {
     color: "#FFF",
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: "bold",
+    textAlign: "center",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
   },
   chartSubtitle: {
     color: "#FFF",
-    fontSize: 16,
+    fontSize: 18,
+    textAlign: "center",
+    marginTop: 5,
+    textShadowColor: "rgba(0, 0, 0, 0.6)",
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   chartDescription: {
     color: "#888",
     fontSize: 13,
-    marginTop: 5,
+    marginTop: 8,
   },
 
   albumCard: {

@@ -27,31 +27,22 @@
       "id": "1",
       "title": "Top 50",
       "subtitle": "Canada",
-      "artwork": [
-        "#6E16B0",
-        "#B0168C"
-      ],
+      "artwork": ["#6E16B0", "#B0168C"],
       "imageKey": "chart_31"
     },
     {
       "id": "2",
       "title": "Top 50",
       "subtitle": "Global",
-      "artwork": [
-        "#16A1B0",
-        "#16B09F"
-      ],
-      "imageKey": "chart_31"
+      "artwork": ["#16A1B0", "#16B09F"],
+      "imageKey": "chart_32"
     },
     {
       "id": "3",
       "title": "Top 50",
       "subtitle": "Daily",
-      "artwork": [
-        "#B06216",
-        "#B09616"
-      ],
-      "imageKey": "chart_31"
+      "artwork": ["#B06216", "#B09616"],
+      "imageKey": "chart_33"
     }
   ],
   "trending_albums": [
@@ -517,6 +508,165 @@
       "artworkKey": "song_40",
       "audioKey": "shape_of_you"
     }
-  ]
+  ],
+  "library-songs": [
+    {
+      "id": "1",
+      "title": "FLOWER",
+      "artist": "Jessica Gonzalez",
+      "plays": "2.1M",
+      "duration": "3:36",
+      "artwork": "🎵",
+      "artworkColor": "#8B5CF6",
+      "isFavorite": true
+    },
+    {
+      "id": "2",
+      "title": "Shape of You",
+      "artist": "Anthony Taylor",
+      "plays": "68M",
+      "duration": "03:35",
+      "artwork": "🎸",
+      "artworkColor": "#EC4899",
+      "isFavorite": true
+    },
+    {
+      "id": "4",
+      "title": "Levitating",
+      "artist": "Anthony Taylor",
+      "plays": "9M",
+      "duration": "07:48",
+      "artwork": "⚡",
+      "artworkColor": "#6366F1",
+      "isFavorite": true
+    },
+    {
+      "id": "5",
+      "title": "Astronaut in the Ocean",
+      "artist": "Pedro Moreno",
+      "plays": "23M",
+      "duration": "3:36",
+      "artwork": "🚀",
+      "artworkColor": "#F97316",
+      "isFavorite": true
+    },
+    {
+      "id": "6",
+      "title": "Dynamite",
+      "artist": "Elena Jimenez",
+      "plays": "10M",
+      "duration": "06:22",
+      "artwork": "💥",
+      "artworkColor": "#F59E0B",
+      "isFavorite": true
+    }
+  ],
+  "library-playlists": [
+    {
+      "id": "1",
+      "title": "Lorem ipsum nulla",
+      "artist": "Ashley Scott",
+      "songCount": 12,
+      "artwork": "🎸",
+      "artworkColor": "#DC2626"
+    },
+    {
+      "id": "2",
+      "title": "My Favorites",
+      "artist": "Jose Garcia",
+      "songCount": 4,
+      "artwork": "👨",
+      "artworkColor": "#E5E7EB"
+    }
+  ],
 
+  "feed": [
+    {
+      "id": "1",
+      "user": {
+        "name": "Jessica Gonzalez",
+        "avatar": "👩🏻",
+        "verified": true
+      },
+      "postTime": "3d",
+      "track": {
+        "title": "FLOWER",
+        "artist": "Jessica Gonzalez",
+        "duration": "05:15",
+        "plays": 125,
+        "artwork": "🎵",
+        "artworkColor": "#F97316"
+      },
+      "engagement": {
+        "likes": 20,
+        "comments": 3,
+        "reposts": 1
+      },
+      "comments": [
+        {
+          "id": "1",
+          "user": "Sally Rooney",
+          "avatar": "👩",
+          "text": "Do duis cul 😍",
+          "time": "17m",
+          "likes": 0
+        },
+        {
+          "id": "2",
+          "user": "Jason",
+          "avatar": "👨🏻",
+          "text": "Minim magna exc 😍",
+          "time": "48m",
+          "likes": 1
+        },
+        {
+          "id": "3",
+          "user": "Michael Key",
+          "avatar": "👨🏼",
+          "text": "@Jason Smith Deserunt officia consectetur adipi",
+          "time": "40m",
+          "likes": 2,
+          "reply": true
+        },
+        {
+          "id": "4",
+          "user": "Liam Pham",
+          "avatar": "👨🏻",
+          "text": "Commodo 🔥",
+          "time": "48m",
+          "likes": 1
+        },
+        {
+          "id": "5",
+          "user": "Kiran Glaucus",
+          "avatar": "👨🏽",
+          "text": "Esse consequat cillum ex",
+          "time": "40m",
+          "likes": 2
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "user": {
+        "name": "William King",
+        "avatar": "👨🏿",
+        "verified": true
+      },
+      "postTime": "5d",
+      "track": {
+        "title": "Me",
+        "artist": "William King",
+        "duration": "05:15",
+        "plays": 245,
+        "artwork": "👁️",
+        "artworkColor": "#E9D5FF"
+      },
+      "engagement": {
+        "likes": 45,
+        "comments": 9,
+        "reposts": 2
+      }
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 // screens/FeedScreen.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,70 +9,13 @@ import {
   SafeAreaView,
   StyleSheet,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { API_BASE_URL } from "../config"; // 👈 Thêm dòng này
 
-// Sample data matching the screenshots
-const feedData = [
-  {
-    id: '1',
-    user: {
-      name: 'Jessica Gonzalez',
-      avatar: '👩🏻',
-      verified: true,
-    },
-    postTime: '3d',
-    track: {
-      title: 'FLOWER',
-      artist: 'Jessica Gonzalez',
-      duration: '05:15',
-      plays: 125,
-      artwork: '🎵',
-      artworkColor: '#F97316',
-    },
-    engagement: {
-      likes: 20,
-      comments: 3,
-      reposts: 1,
-    },
-    comments: [
-      { id: '1', user: 'Sally Rooney', avatar: '👩', text: 'Do duis cul 😍', time: '17m', likes: 0 },
-      { id: '2', user: 'Jason', avatar: '👨🏻', text: 'Minim magna exc 😍', time: '48m', likes: 1 },
-      { id: '3', user: 'Michael Key', avatar: '👨🏼', text: '@Jason Smith Deserunt officia consectetur adipi', time: '40m', likes: 2, reply: true },
-      { id: '4', user: 'Liam Pham', avatar: '👨🏻', text: 'Commodo 🔥', time: '48m', likes: 1 },
-      { id: '5', user: 'Kiran Glaucus', avatar: '👨🏽', text: 'Esse consequat cillum ex', time: '40m', likes: 2 },
-    ],
-  },
-  {
-    id: '2',
-    user: {
-      name: 'William King',
-      avatar: '👨🏿',
-      verified: true,
-    },
-    postTime: '5d',
-    track: {
-      title: 'Me',
-      artist: 'William King',
-      duration: '05:15',
-      plays: 245,
-      artwork: '👁️',
-      artworkColor: '#E9D5FF',
-    },
-    engagement: {
-      likes: 45,
-      comments: 9,
-      reposts: 2,
-    },
-  },
-];
-
-interface FeedPostProps {
-  post: typeof feedData[0];
-  onExpandComments: (postId: string) => void;
-}
-
-function FeedPost({ post, onExpandComments }: FeedPostProps) {
+// Giữ nguyên các component FeedPost và CommentSection (không đổi)
+function FeedPost({ post, onExpandComments }: any) {
   const [liked, setLiked] = useState(false);
 
   return (
@@ -156,18 +99,11 @@ function FeedPost({ post, onExpandComments }: FeedPostProps) {
   );
 }
 
-interface CommentSectionProps {
-  post: typeof feedData[0];
-  onClose: () => void;
-}
-
-function CommentSection({ post, onClose }: CommentSectionProps) {
+function CommentSection({ post, onClose }: any) {
   const [commentText, setCommentText] = useState('');
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.commentSection}>
-        {/* Header */}
         <View style={styles.commentHeader}>
           <View style={styles.headerTop}>
             <Text style={styles.headerTitle}>Feed</Text>
@@ -176,7 +112,6 @@ function CommentSection({ post, onClose }: CommentSectionProps) {
             </TouchableOpacity>
           </View>
 
-          {/* Mini Track Display */}
           <View style={styles.miniTrackContainer}>
             <View style={styles.avatarContainer}>
               <Text style={styles.avatarEmoji}>{post.user.avatar}</Text>
@@ -198,15 +133,13 @@ function CommentSection({ post, onClose }: CommentSectionProps) {
           </View>
         </View>
 
-        {/* Comments Header */}
         <TouchableOpacity style={styles.commentsCountButton}>
           <Text style={styles.commentsCountText}>{post.engagement.comments} comments</Text>
           <Ionicons name="chevron-down" size={20} color="#6B7280" />
         </TouchableOpacity>
 
-        {/* Comments List */}
         <View style={styles.commentsList}>
-          {post.comments?.map((comment) => (
+          {post.comments?.map((comment: any) => (
             <View 
               key={comment.id} 
               style={[styles.commentItem, comment.reply && styles.commentReply]}
@@ -240,7 +173,6 @@ function CommentSection({ post, onClose }: CommentSectionProps) {
         </View>
       </ScrollView>
 
-      {/* Comment Input */}
       <View style={styles.commentInputContainer}>
         <View style={styles.userAvatarInput}>
           <Text style={styles.userAvatarInputText}>A</Text>
@@ -263,12 +195,40 @@ function CommentSection({ post, onClose }: CommentSectionProps) {
 }
 
 export default function FeedScreen() {
-  const [expandedPost, setExpandedPost] = useState<typeof feedData[0] | null>(null);
+  const [feedData, setFeedData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [expandedPost, setExpandedPost] = useState<any | null>(null);
+
+  // ✅ Thêm useEffect để gọi dữ liệu từ json-server
+  useEffect(() => {
+    const fetchFeed = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${API_BASE_URL}/feed`);
+        const data = await res.json();
+        setFeedData(data);
+      } catch (error) {
+        console.error("Lỗi khi tải feed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeed();
+  }, []);
 
   const handleExpandComments = (postId: string) => {
     const post = feedData.find(p => p.id === postId);
     setExpandedPost(post || null);
   };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.container, { justifyContent: "center", alignItems: "center" }]}>
+        <ActivityIndicator size="large" color="#3B82F6" />
+      </SafeAreaView>
+    );
+  }
 
   if (expandedPost) {
     return <CommentSection post={expandedPost} onClose={() => setExpandedPost(null)} />;
@@ -277,8 +237,6 @@ export default function FeedScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Feed</Text>
         <TouchableOpacity>
@@ -286,7 +244,6 @@ export default function FeedScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Feed Posts */}
       <ScrollView style={styles.feedContent}>
         {feedData.map(post => (
           <FeedPost 
