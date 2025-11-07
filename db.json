@@ -461,5 +461,62 @@
       "artworkKey": "suggestion_27",
       "audioKey": "shape_of_you"
     }
+  ],
+  "my_awesome_playlist": [
+    {
+      "id": "1",
+      "title": "FLOWER",
+      "artist": "Jessica Gonzalez",
+      "duration": "3:36",
+      "plays": "2.1M",
+      "artworkKey": "album_45",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "2",
+      "title": "Shape of You",
+      "artist": "Anthony Taylor",
+      "duration": "03:35",
+      "plays": "68M",
+      "artworkKey": "album_46",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "3",
+      "title": "Blinding Lights",
+      "artist": "Brian Bailey",
+      "duration": "04:39",
+      "plays": "93M",
+      "artworkKey": "song_47",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "4",
+      "title": "Levitating",
+      "artist": "Anthony Taylor",
+      "duration": "07:48",
+      "plays": "9M",
+      "artworkKey": "song_47",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "5",
+      "title": "Astronaut in the Ocean",
+      "artist": "Pedro Moreno",
+      "duration": "3:36",
+      "plays": "23M",
+      "artworkKey": "song_47",
+      "audioKey": "shape_of_you"
+    },
+    {
+      "id": "6",
+      "title": "Dynamite",
+      "artist": "Elena Jimenez",
+      "duration": "06:22",
+      "plays": "10M",
+      "artworkKey": "song_40",
+      "audioKey": "shape_of_you"
+    }
   ]
+
 }

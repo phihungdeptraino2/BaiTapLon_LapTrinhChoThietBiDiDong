@@ -103,7 +103,7 @@ export default function HomeScreen({ navigation }: Props) {
       onPress={() =>
         rootStackNavigation.navigate("Playlist", {
           // Gửi ID của playlist (để PlaylistScreen tự fetch)
-          playlistId: "playlist_top50_canada", // 👈 SỬA (key này phải có trong db.json)
+          playlistId: "my_awesome_playlist", // 👈 SỬA (key này phải có trong db.json)
           title: `${item.title} - ${item.subtitle}`,
           artwork: getAssetImage(item.imageKey), // 👈 SỬA
         })

@@ -26,6 +26,7 @@ const POPULAR_SONGS: Song[] = [
     duration: "3:36",
     plays: "2.1M",
     artwork: require("../assets/Playlist Details - Audio Listing/Image 50.png"),
+    audioKey: "shape_of_you"
   },
   {
     id: "2",
@@ -34,6 +35,7 @@ const POPULAR_SONGS: Song[] = [
     duration: "4:39",
     plays: "93M",
     artwork: require("../assets/Playlist Details - Audio Listing/Image 51.png"),
+    audioKey: "shape_of_you"
   },
   {
     id: "3",
@@ -42,6 +44,7 @@ const POPULAR_SONGS: Song[] = [
     duration: "7:48",
     plays: "9M",
     artwork: require("../assets/Playlist Details - Audio Listing/Image 52.png"),
+    audioKey: "shape_of_you"
   },
   {
     id: "4",
@@ -50,6 +53,7 @@ const POPULAR_SONGS: Song[] = [
     duration: "3:36",
     plays: "23M",
     artwork: require("../assets/Playlist Details - Audio Listing/Image 54.png"),
+    audioKey: "shape_of_you"
   },
   {
     id: "5",
@@ -58,6 +62,7 @@ const POPULAR_SONGS: Song[] = [
     duration: "6:22",
     plays: "10M",
     artwork: require("../assets/Playlist Details - Audio Listing/Image 55.png"),
+    audioKey: "shape_of_you"
   },
 ];
 

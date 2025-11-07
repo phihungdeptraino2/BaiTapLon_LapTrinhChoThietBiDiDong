@@ -1,5 +1,5 @@
 // screens/PlaylistScreen.tsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,62 +9,20 @@ import {
   Image,
   TouchableOpacity,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
 import { RootStackScreenProps } from "../navigation/types";
 import { Song } from "../interfaces/data";
 import { Ionicons, Feather } from "@expo/vector-icons";
 
-const MOCK_SONGS: Song[] = [
-  {
-    id: "1",
-    title: "FLOWER",
-    artist: "Jessica Gonzalez",
-    duration: "3:36",
-    plays: "2.1M",
-    artwork: require("../assets/Home - Audio Listing/Image 45.png"),
-  },
-  {
-    id: "2",
-    title: "Shape of You",
-    artist: "Anthony Taylor",
-    duration: "03:35",
-    plays: "68M",
-    artwork: require("../assets/Home - Audio Listing/Image 46.png"),
-  },
-  {
-    id: "3",
-    title: "Blinding Lights",
-    artist: "Brian Bailey",
-    duration: "04:39",
-    plays: "93M",
-    artwork: require("../assets/Home - Audio Listing/Image 47.png"),
-  },
-  {
-    id: "4",
-    title: "Levitating",
-    artist: "Anthony Taylor",
-    duration: "07:48",
-    plays: "9M",
-    artwork: require("../assets/Home - Audio Listing/Image 47.png"),
-  },
-  {
-    id: "5",
-    title: "Astronaut in the Ocean",
-    artist: "Pedro Moreno",
-    duration: "3:36",
-    plays: "23M",
-    artwork: require("../assets/Home - Audio Listing/Image 47.png"),
-  },
-  {
-    id: "6",
-    title: "Dynamite",
-    artist: "Elena Jimenez",
-    duration: "06:22",
-    plays: "10M",
-    artwork: require("../assets/Home - Audio Listing/Image 40.png"),
-  },
-];
+import { API_BASE_URL } from "../config";
+import { getAssetImage } from "../utils/ImageManager";
 
+type Props = RootStackScreenProps<"Playlist">;
+
+// ──────────────────────────────
+// Component hiển thị 1 bài hát
+// ──────────────────────────────
 const SongItem = ({ item, onPress }: { item: Song; onPress: () => void }) => (
   <TouchableOpacity style={styles.songItem} onPress={onPress}>
     <Image source={item.artwork} style={styles.songArt} />
@@ -82,18 +40,57 @@ const SongItem = ({ item, onPress }: { item: Song; onPress: () => void }) => (
   </TouchableOpacity>
 );
 
-type Props = RootStackScreenProps<"Playlist">;
-
+// ──────────────────────────────
+// Màn hình chính PlaylistScreen
+// ──────────────────────────────
 export default function PlaylistScreen({ navigation, route }: Props) {
-  const { title, artwork } = route.params;
+  const { title, artwork, playlistId } = route.params;
+
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!playlistId) {
+      console.error("❌ Không có playlistId được truyền vào PlaylistScreen!");
+      setLoading(false);
+      return;
+    }
+
+    const fetchPlaylistSongs = async () => {
+      try {
+        setLoading(true);
+
+        const response = await fetch(`${API_BASE_URL}/${playlistId}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: Song[] = await response.json();
+
+        // Chuẩn hóa artwork
+        const formattedSongs = data.map((song) => ({
+          ...song,
+          artwork: getAssetImage(song.artworkKey ?? ""),
+        }));
+
+        setSongs(formattedSongs);
+      } catch (error) {
+        console.error("⚠️ Lỗi khi tải dữ liệu playlist:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlaylistSongs();
+  }, [playlistId]);
 
   const handleSongPress = (song: Song) => {
-    navigation.navigate("Player", {
-      song,
-      // playlist: MOCK_SONGS,
-    });
+    navigation.navigate("Player", { song });
   };
 
+  // ──────────────────────────────
+  // Header của playlist
+  // ──────────────────────────────
   const PlaylistHeader = () => (
     <View style={styles.headerContainer}>
       <Image source={artwork} style={styles.playlistImage} />
@@ -116,17 +113,30 @@ export default function PlaylistScreen({ navigation, route }: Props) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.playButton}
-          onPress={() => handleSongPress(MOCK_SONGS[0])}
+          onPress={() => songs.length > 0 && handleSongPress(songs[0])}
         >
-          <Ionicons name="play" size={32} color="white" />
+          <Ionicons name="play" size={32} color="#FFF" />
         </TouchableOpacity>
       </View>
     </View>
   );
 
+  // ──────────────────────────────
+  // Loading Screen
+  // ──────────────────────────────
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.safeArea, styles.centerScreen]}>
+        <ActivityIndicator size="large" color="#000" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
+
+      {/* Header trên cùng */}
       <View style={styles.customHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={28} color="#000" />
@@ -135,8 +145,10 @@ export default function PlaylistScreen({ navigation, route }: Props) {
           <Feather name="cast" size={24} color="#000" />
         </TouchableOpacity>
       </View>
+
+      {/* Danh sách bài hát */}
       <FlatList
-        data={MOCK_SONGS}
+        data={songs}
         renderItem={({ item }) => (
           <SongItem item={item} onPress={() => handleSongPress(item)} />
         )}
@@ -148,10 +160,17 @@ export default function PlaylistScreen({ navigation, route }: Props) {
   );
 }
 
+// ──────────────────────────────
+// Styles
+// ──────────────────────────────
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FFF",
+  },
+  centerScreen: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   customHeader: {
     flexDirection: "row",
