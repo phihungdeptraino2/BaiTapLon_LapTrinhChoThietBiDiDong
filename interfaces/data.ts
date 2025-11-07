@@ -50,7 +50,7 @@ export interface Artist {
 export interface Playlist {
   id: string;
   title: string;
-  artwork: any;
+  artwork?: any;
   songCount?: number;
   totalDuration?: string;
 }

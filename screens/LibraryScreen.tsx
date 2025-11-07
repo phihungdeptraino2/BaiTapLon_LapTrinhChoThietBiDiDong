@@ -1,4 +1,4 @@
-// screens/LibraryScreen.tsx
+// screens/LibraryScreen.tsx - HOÀN CHỈNH (SẠCH CODE)
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -8,46 +8,74 @@ import {
   StyleSheet,
   StatusBar,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { Song, Playlist } from "../interfaces/data";
 import { API_BASE_URL } from "../config";
+import { getAssetImage } from "../utils/ImageManager";
 
-// Extend interfaces
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../navigation/types";
+
+// ======= INTERFACES =======
 interface LibrarySong extends Omit<Song, "duration"> {
   duration?: string;
+  artworkKey?: string;
   artworkColor?: string;
+  artwork?: string;
   isFavorite?: boolean;
 }
 
 interface LibraryPlaylist extends Playlist {
   artist: string;
+  artworkKey?: string;
   artworkColor?: string;
+  artwork?: string;
 }
 
 interface LibraryItemProps {
   item: LibrarySong;
   onToggleFavorite?: (id: string) => void;
+  onPress?: (song: LibrarySong) => void;
 }
 
-function LibraryItem({ item, onToggleFavorite }: LibraryItemProps) {
+// ======= COMPONENT: LibraryItem =======
+function LibraryItem({ item, onToggleFavorite, onPress }: LibraryItemProps) {
   return (
     <View style={styles.libraryItem}>
-      <View style={[styles.artwork, { backgroundColor: item.artworkColor }]}>
-        <Text style={styles.artworkEmoji}>{item.artwork}</Text>
-      </View>
-      <View style={styles.itemInfo}>
-        <Text style={styles.itemTitle}>{item.title}</Text>
-        <View style={styles.itemMeta}>
-          <Text style={styles.itemArtist}>{item.artist}</Text>
-          <View style={styles.metaDot} />
-          <Ionicons name="play" size={10} color="#6B7280" />
-          <Text style={styles.itemStats}>{item.plays}</Text>
-          <View style={styles.metaDot} />
-          <Text style={styles.itemStats}>{item.duration}</Text>
+      <TouchableOpacity
+        style={styles.itemPressableArea}
+        onPress={() => onPress?.(item)}
+      >
+        {item.artworkKey ? (
+          <Image
+            source={getAssetImage(item.artworkKey)}
+            style={styles.artworkImage}
+          />
+        ) : (
+          <View
+            style={[styles.artwork, { backgroundColor: item.artworkColor }]}
+          >
+            <Text style={styles.artworkEmoji}>{item.artwork}</Text>
+          </View>
+        )}
+
+        <View style={styles.itemInfo}>
+          <Text style={styles.itemTitle}>{item.title}</Text>
+          <View style={styles.itemMeta}>
+            <Text style={styles.itemArtist}>{item.artist}</Text>
+            <View style={styles.metaDot} />
+            <Ionicons name="play" size={10} color="#6B7280" />
+            <Text style={styles.itemStats}>{item.plays}</Text>
+            <View style={styles.metaDot} />
+            <Text style={styles.itemStats}>{item.duration}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
+
       {item.isFavorite !== undefined && (
         <TouchableOpacity onPress={() => onToggleFavorite?.(item.id)}>
           <Ionicons
@@ -61,6 +89,7 @@ function LibraryItem({ item, onToggleFavorite }: LibraryItemProps) {
   );
 }
 
+// ======= COMPONENT: PlaylistItem =======
 interface PlaylistItemProps {
   item: LibraryPlaylist;
   onPress?: () => void;
@@ -69,11 +98,18 @@ interface PlaylistItemProps {
 function PlaylistItem({ item, onPress }: PlaylistItemProps) {
   return (
     <TouchableOpacity style={styles.playlistItem} onPress={onPress}>
-      <View
-        style={[styles.playlistArtwork, { backgroundColor: item.artworkColor }]}
-      >
-        <Text style={styles.playlistArtworkEmoji}>{item.artwork}</Text>
-      </View>
+      {item.artworkKey ? (
+        <Image
+          source={getAssetImage(item.artworkKey)}
+          style={styles.playlistArtworkImage}
+        />
+      ) : (
+        <View
+          style={[styles.playlistArtwork, { backgroundColor: item.artworkColor }]}
+        >
+          <Text style={styles.playlistArtworkEmoji}>{item.artwork}</Text>
+        </View>
+      )}
       <View style={styles.playlistInfo}>
         <Text style={styles.playlistTitle}>{item.title}</Text>
         <View style={styles.playlistMeta}>
@@ -87,14 +123,15 @@ function PlaylistItem({ item, onPress }: PlaylistItemProps) {
   );
 }
 
+// ======= COMPONENT: LibraryScreen =======
 export default function LibraryScreen() {
-  const [activeTab, setActiveTab] = useState<"main" | "playlists">("main");
+  type RootStackNavigationProp = StackNavigationProp<RootStackParamList>;
+  const navigation = useNavigation<RootStackNavigationProp>();
 
-  // ✅ Dữ liệu từ API
+  const [activeTab, setActiveTab] = useState<"main" | "playlists">("main");
   const [songs, setSongs] = useState<LibrarySong[]>([]);
   const [playlists, setPlaylists] = useState<LibraryPlaylist[]>([]);
   const [loading, setLoading] = useState(true);
-
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -105,14 +142,12 @@ export default function LibraryScreen() {
           fetch(`${API_BASE_URL}/library-songs`),
           fetch(`${API_BASE_URL}/library-playlists`),
         ]);
-
         const songsData = await songsRes.json();
         const playlistsData = await playlistsRes.json();
 
         setSongs(songsData);
         setPlaylists(playlistsData);
 
-        // Đặt danh sách yêu thích ban đầu
         const favIds = songsData
           .filter((s: LibrarySong) => s.isFavorite)
           .map((s: LibrarySong) => s.id);
@@ -123,7 +158,6 @@ export default function LibraryScreen() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -147,12 +181,11 @@ export default function LibraryScreen() {
     });
   };
 
-  const handlePlaylistPress = () => {
-    setActiveTab("playlists");
-  };
+  const handlePlaylistPress = () => setActiveTab("playlists");
+  const handleBackPress = () => setActiveTab("main");
 
-  const handleBackPress = () => {
-    setActiveTab("main");
+  const handleSongPress = (song: LibrarySong) => {
+    navigation.navigate("Player", { song });
   };
 
   if (loading) {
@@ -169,8 +202,6 @@ export default function LibraryScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" />
-
-        {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
             <Ionicons name="chevron-back" size={24} color="#1F2937" />
@@ -180,14 +211,12 @@ export default function LibraryScreen() {
             <Ionicons name="scan-outline" size={24} color="#1F2937" />
           </TouchableOpacity>
         </View>
-
         <ScrollView style={styles.content}>
           <Text style={styles.sectionTitle}>Your playlists</Text>
           {playlists.map((playlist) => (
             <PlaylistItem key={playlist.id} item={playlist} />
           ))}
         </ScrollView>
-
         <TouchableOpacity style={styles.addButton}>
           <Ionicons name="add" size={32} color="#FFF" />
         </TouchableOpacity>
@@ -198,8 +227,6 @@ export default function LibraryScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Your Library</Text>
         <TouchableOpacity>
@@ -207,7 +234,6 @@ export default function LibraryScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Tabs */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -225,16 +251,13 @@ export default function LibraryScreen() {
         ))}
       </ScrollView>
 
-      {/* Songs */}
       <ScrollView style={styles.content}>
         {songs.map((item) => (
           <LibraryItem
             key={item.id}
-            item={{
-              ...item,
-              isFavorite: favorites.has(item.id),
-            }}
+            item={{ ...item, isFavorite: favorites.has(item.id) }}
             onToggleFavorite={handleToggleFavorite}
+            onPress={handleSongPress}
           />
         ))}
       </ScrollView>
@@ -242,7 +265,7 @@ export default function LibraryScreen() {
   );
 }
 
-// 
+// ======= STYLES =======
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -296,6 +319,17 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     gap: 12,
   },
+  itemPressableArea: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  artworkImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 8,
+  },
   artwork: {
     width: 56,
     height: 56,
@@ -347,6 +381,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     gap: 12,
+  },
+  playlistArtworkImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 8,
   },
   playlistArtwork: {
     width: 56,

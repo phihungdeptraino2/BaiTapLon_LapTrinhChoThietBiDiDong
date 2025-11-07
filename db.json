@@ -516,9 +516,11 @@
       "artist": "Jessica Gonzalez",
       "plays": "2.1M",
       "duration": "3:36",
+      "artworkKey": "album_45",
       "artwork": "🎵",
       "artworkColor": "#8B5CF6",
-      "isFavorite": true
+      "isFavorite": true,
+      "audioKey": "flower"
     },
     {
       "id": "2",
@@ -526,9 +528,23 @@
       "artist": "Anthony Taylor",
       "plays": "68M",
       "duration": "03:35",
+      "artworkKey": "album_46",
       "artwork": "🎸",
       "artworkColor": "#EC4899",
-      "isFavorite": true
+      "isFavorite": true,
+      "audioKey": "flower"
+    },
+    {
+      "id": "3",
+      "title": "Blinding Lights",
+      "artist": "Brian Bailey",
+      "plays": "93M",
+      "duration": "04:39",
+      "artworkKey": "song_47",
+      "artwork": "🌟",
+      "artworkColor": "#3B82F6",
+      "isFavorite": false,
+      "audioKey": "flower"
     },
     {
       "id": "4",
@@ -536,9 +552,11 @@
       "artist": "Anthony Taylor",
       "plays": "9M",
       "duration": "07:48",
+      "artworkKey": "song_50",
       "artwork": "⚡",
       "artworkColor": "#6366F1",
-      "isFavorite": true
+      "isFavorite": true,
+      "audioKey": "flower"
     },
     {
       "id": "5",
@@ -546,9 +564,11 @@
       "artist": "Pedro Moreno",
       "plays": "23M",
       "duration": "3:36",
+      "artworkKey": "search_song_106",
       "artwork": "🚀",
       "artworkColor": "#F97316",
-      "isFavorite": true
+      "isFavorite": true,
+      "audioKey": "flower"
     },
     {
       "id": "6",
@@ -556,9 +576,11 @@
       "artist": "Elena Jimenez",
       "plays": "10M",
       "duration": "06:22",
+      "artworkKey": "song_40",
       "artwork": "💥",
       "artworkColor": "#F59E0B",
-      "isFavorite": true
+      "isFavorite": true,
+      "audioKey": "flower"
     }
   ],
   "library-playlists": [
@@ -567,16 +589,20 @@
       "title": "Lorem ipsum nulla",
       "artist": "Ashley Scott",
       "songCount": 12,
+      "artworkKey": "artist_album_71",
       "artwork": "🎸",
-      "artworkColor": "#DC2626"
+      "artworkColor": "#DC2626",
+      "audioKey": "flower"
     },
     {
       "id": "2",
       "title": "My Favorites",
       "artist": "Jose Garcia",
       "songCount": 4,
+      "artworkKey": "artist_album_72",
       "artwork": "👨",
-      "artworkColor": "#E5E7EB"
+      "artworkColor": "#E5E7EB",
+      "audioKey": "flower"
     }
   ],
 
@@ -586,6 +612,7 @@
       "user": {
         "name": "Jessica Gonzalez",
         "avatar": "👩🏻",
+        "avatarKey": "album_45",
         "verified": true
       },
       "postTime": "3d",
@@ -595,7 +622,8 @@
         "duration": "05:15",
         "plays": 125,
         "artwork": "🎵",
-        "artworkColor": "#F97316"
+        "artworkColor": "#F97316",
+        "artworkKey": "album_45"
       },
       "engagement": {
         "likes": 20,
@@ -607,6 +635,7 @@
           "id": "1",
           "user": "Sally Rooney",
           "avatar": "👩",
+          "avatarKey": "artist_39",
           "text": "Do duis cul 😍",
           "time": "17m",
           "likes": 0
@@ -615,6 +644,7 @@
           "id": "2",
           "user": "Jason",
           "avatar": "👨🏻",
+          "avatarKey": "artist_40",
           "text": "Minim magna exc 😍",
           "time": "48m",
           "likes": 1
@@ -623,6 +653,7 @@
           "id": "3",
           "user": "Michael Key",
           "avatar": "👨🏼",
+          "avatarKey": "suggestion_26",
           "text": "@Jason Smith Deserunt officia consectetur adipi",
           "time": "40m",
           "likes": 2,
@@ -632,6 +663,7 @@
           "id": "4",
           "user": "Liam Pham",
           "avatar": "👨🏻",
+          "avatarKey": "suggestion_27",
           "text": "Commodo 🔥",
           "time": "48m",
           "likes": 1
@@ -640,6 +672,7 @@
           "id": "5",
           "user": "Kiran Glaucus",
           "avatar": "👨🏽",
+          "avatarKey": "artist_39",
           "text": "Esse consequat cillum ex",
           "time": "40m",
           "likes": 2
@@ -651,6 +684,7 @@
       "user": {
         "name": "William King",
         "avatar": "👨🏿",
+        "avatarKey": "search_artist_101",
         "verified": true
       },
       "postTime": "5d",
@@ -660,7 +694,8 @@
         "duration": "05:15",
         "plays": 245,
         "artwork": "👁️",
-        "artworkColor": "#E9D5FF"
+        "artworkColor": "#E9D5FF",
+        "artworkKey": "search_song_102"
       },
       "engagement": {
         "likes": 45,
