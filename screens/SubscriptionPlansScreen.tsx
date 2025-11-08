@@ -123,9 +123,7 @@ export default function SubscriptionPlansScreen({ navigation }: Props) {
                 {/* Subscribe Button */}
                 <TouchableOpacity
                   style={styles.subscribeButton}
-                  onPress={() => {
-                    console.log(`Subscribe to ${plan.name}`);
-                  }}
+                  onPress={() => navigation.navigate("WelcomePremium")}
                 >
                   <Text style={styles.subscribeButtonText}>Subscribe now</Text>
                 </TouchableOpacity>
@@ -139,10 +137,7 @@ export default function SubscriptionPlansScreen({ navigation }: Props) {
           {PLANS.map((_, index) => (
             <View
               key={index}
-              style={[
-                styles.dot,
-                activeIndex === index && styles.dotActive,
-              ]}
+              style={[styles.dot, activeIndex === index && styles.dotActive]}
             />
           ))}
         </View>

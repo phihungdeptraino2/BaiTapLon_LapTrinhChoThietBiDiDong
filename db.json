@@ -16,9 +16,9 @@
     },
     {
       "id": "3",
-      "title": "In The Stars",
-      "artist": "Benson Boone",
-      "artworkKey": "suggestion_27",
+      "title": " The Best",
+      "artist": "Sonson Boone",
+      "artworkKey": "suggestion_28",
       "audioKey": "shape_of_you"
     }
   ],
@@ -57,6 +57,12 @@
       "title": "Magna nost",
       "artist": "Brian Thomas",
       "artworkKey": "album_46"
+    },
+    {
+      "id": "3",
+      "title": "MTP TV",
+      "artist": "Zayn Tom",
+      "artworkKey": "song_47"
     }
   ],
   "popular_artists": [
@@ -69,6 +75,11 @@
       "id": "2",
       "name": "Elizabeth Hall",
       "avatarKey": "artist_40"
+    },
+    {
+      "id": "3",
+      "name": "Mabeth Hall",
+      "avatarKey": "artist_41"
     }
   ],
   "playlist_top50_canada": [
@@ -78,7 +89,7 @@
       "artist": "Jessica Gonzalez",
       "duration": "3:36",
       "plays": "2.1M",
-      "artworkKey": "album_45",
+      "artworkKey": "Image93",
       "audioKey": "flower"
     },
     {
@@ -87,7 +98,7 @@
       "artist": "Anthony Taylor",
       "duration": "03:35",
       "plays": "68M",
-      "artworkKey": "album_46",
+      "artworkKey": "Image94",
       "audioKey": "shape_of_you"
     },
     {
@@ -332,7 +343,7 @@
       "artist": "Jessica Gonzalez",
       "duration": "3:36",
       "plays": "2.1M",
-      "artworkKey": "album_45",
+      "artworkKey": "Image94",
       "audioKey": "flower"
     },
     {
@@ -341,7 +352,7 @@
       "artist": "Anthony Taylor",
       "duration": "03:35",
       "plays": "68M",
-      "artworkKey": "album_46",
+      "artworkKey": "Image93",
       "audioKey": "shape_of_you"
     },
     {
@@ -460,7 +471,7 @@
       "artist": "Jessica Gonzalez",
       "duration": "3:36",
       "plays": "2.1M",
-      "artworkKey": "album_45",
+      "artworkKey": "Image93",
       "audioKey": "shape_of_you"
     },
     {
@@ -469,7 +480,7 @@
       "artist": "Anthony Taylor",
       "duration": "03:35",
       "plays": "68M",
-      "artworkKey": "album_46",
+      "artworkKey": "Image94",
       "audioKey": "shape_of_you"
     },
     {
@@ -612,7 +623,7 @@
       "user": {
         "name": "Jessica Gonzalez",
         "avatar": "👩🏻",
-        "avatarKey": "album_45",
+        "avatarKey": "Avartar1",
         "verified": true
       },
       "postTime": "3d",
@@ -623,7 +634,7 @@
         "plays": 125,
         "artwork": "🎵",
         "artworkColor": "#F97316",
-        "artworkKey": "album_45"
+        "artworkKey": "Image93"
       },
       "engagement": {
         "likes": 20,
@@ -635,7 +646,7 @@
           "id": "1",
           "user": "Sally Rooney",
           "avatar": "👩",
-          "avatarKey": "artist_39",
+          "avatarKey": "Avartar2",
           "text": "Do duis cul 😍",
           "time": "17m",
           "likes": 0
@@ -644,7 +655,7 @@
           "id": "2",
           "user": "Jason",
           "avatar": "👨🏻",
-          "avatarKey": "artist_40",
+          "avatarKey": "Avartar3",
           "text": "Minim magna exc 😍",
           "time": "48m",
           "likes": 1
@@ -653,7 +664,7 @@
           "id": "3",
           "user": "Michael Key",
           "avatar": "👨🏼",
-          "avatarKey": "suggestion_26",
+          "avatarKey": "Avartar4",
           "text": "@Jason Smith Deserunt officia consectetur adipi",
           "time": "40m",
           "likes": 2,
@@ -663,7 +674,7 @@
           "id": "4",
           "user": "Liam Pham",
           "avatar": "👨🏻",
-          "avatarKey": "suggestion_27",
+          "avatarKey": "Avartar3",
           "text": "Commodo 🔥",
           "time": "48m",
           "likes": 1
@@ -672,7 +683,7 @@
           "id": "5",
           "user": "Kiran Glaucus",
           "avatar": "👨🏽",
-          "avatarKey": "artist_39",
+          "avatarKey": "Avartar2",
           "text": "Esse consequat cillum ex",
           "time": "40m",
           "likes": 2
@@ -684,7 +695,7 @@
       "user": {
         "name": "William King",
         "avatar": "👨🏿",
-        "avatarKey": "search_artist_101",
+        "avatarKey": "Avartar4",
         "verified": true
       },
       "postTime": "5d",
@@ -695,7 +706,7 @@
         "plays": 245,
         "artwork": "👁️",
         "artworkColor": "#E9D5FF",
-        "artworkKey": "search_song_102"
+        "artworkKey": "Image94"
       },
       "engagement": {
         "likes": 45,

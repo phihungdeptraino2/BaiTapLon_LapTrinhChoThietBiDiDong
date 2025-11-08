@@ -184,7 +184,7 @@ export default function HomeScreen({ navigation }: Props) {
               color="black"
               style={{ marginRight: 15 }}
             />
-            <Image source={AppImages.avatar_3} style={styles.avatar} />
+            <Image source={AppImages.avatar_4} style={styles.avatar} />
           </View>
         </View>
 

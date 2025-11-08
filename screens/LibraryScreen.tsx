@@ -105,7 +105,10 @@ function PlaylistItem({ item, onPress }: PlaylistItemProps) {
         />
       ) : (
         <View
-          style={[styles.playlistArtwork, { backgroundColor: item.artworkColor }]}
+          style={[
+            styles.playlistArtwork,
+            { backgroundColor: item.artworkColor },
+          ]}
         >
           <Text style={styles.playlistArtworkEmoji}>{item.artwork}</Text>
         </View>
@@ -191,7 +194,10 @@ export default function LibraryScreen() {
   if (loading) {
     return (
       <SafeAreaView
-        style={[styles.container, { justifyContent: "center", alignItems: "center" }]}
+        style={[
+          styles.container,
+          { justifyContent: "center", alignItems: "center" },
+        ]}
       >
         <ActivityIndicator size="large" color="#00AFFF" />
       </SafeAreaView>
@@ -266,58 +272,87 @@ export default function LibraryScreen() {
 }
 
 // ======= STYLES =======
+// ======= STYLES =======
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#FFFFFF",
   },
+
+  // ===== HEADER =====
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 18,
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F1F5F9",
   },
   backButton: {
-    padding: 4,
+    padding: 6,
   },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#1F2937",
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#111827",
     flex: 1,
     textAlign: "center",
   },
-  tabsContainer: {
-    maxHeight: 50,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
-  },
-  tabsContent: {
-    paddingHorizontal: 16,
-    gap: 8,
-  },
-  tab: {
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: "#F3F4F6",
-    borderRadius: 20,
-  },
-  tabText: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#1F2937",
-  },
+
+  // ===== TABS =====
+// ===== TABS =====
+tabsContainer: {
+  borderBottomWidth: 1,
+  borderBottomColor: "#E5E7EB",
+  backgroundColor: "#FFFFFF",
+  paddingVertical: 8,   // ⬆️ tăng nhẹ
+  minHeight: 50,        // ✅ đủ cho chữ không bị cắt
+},
+tabsContent: {
+  paddingHorizontal: 16,
+  gap: 10,
+  alignItems: "center",
+},
+tab: {
+  paddingHorizontal: 18,
+  paddingVertical: 8,   // ⬆️ tăng từ 6 → 8
+  backgroundColor: "#F3F4F6",
+  borderRadius: 20,
+},
+tabText: {
+  fontSize: 15,
+  fontWeight: "500",
+  color: "#374151",
+  textAlignVertical: "center", // ✅ đảm bảo căn giữa dọc chữ
+},
+  // ===== CONTENT =====
   content: {
-    flex: 1,
-    paddingTop: 16,
+    flexGrow: 1, // ✅ Cho phép cuộn nhưng không chiếm thêm khoảng trống
+    paddingTop: 8,
+    paddingBottom: 100,
+    backgroundColor: "#FFFFFF",
   },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#1F2937",
+    paddingHorizontal: 20,
+    marginBottom: 16,
+    marginTop: 10,
+  },
+
+  // ===== SONG ITEM =====
   libraryItem: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 14,
     gap: 12,
+    backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F3F4F6",
   },
   itemPressableArea: {
     flex: 1,
@@ -328,25 +363,25 @@ const styles = StyleSheet.create({
   artworkImage: {
     width: 56,
     height: 56,
-    borderRadius: 8,
+    borderRadius: 12,
   },
   artwork: {
     width: 56,
     height: 56,
-    borderRadius: 8,
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
   },
   artworkEmoji: {
-    fontSize: 24,
+    fontSize: 26,
   },
   itemInfo: {
     flex: 1,
   },
   itemTitle: {
     fontSize: 16,
-    fontWeight: "500",
-    color: "#1F2937",
+    fontWeight: "600",
+    color: "#111827",
     marginBottom: 4,
   },
   itemMeta: {
@@ -368,41 +403,38 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#6B7280",
   },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#1F2937",
-    paddingHorizontal: 20,
-    marginBottom: 16,
-  },
+
+  // ===== PLAYLIST ITEM =====
   playlistItem: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingVertical: 14,
     gap: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F3F4F6",
   },
   playlistArtworkImage: {
     width: 56,
     height: 56,
-    borderRadius: 8,
+    borderRadius: 12,
   },
   playlistArtwork: {
     width: 56,
     height: 56,
-    borderRadius: 8,
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
   },
   playlistArtworkEmoji: {
-    fontSize: 24,
+    fontSize: 26,
   },
   playlistInfo: {
     flex: 1,
   },
   playlistTitle: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "600",
     color: "#1F2937",
     marginBottom: 4,
   },
@@ -415,20 +447,23 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#6B7280",
   },
+
+  // ===== FLOATING BUTTON =====
   addButton: {
     position: "absolute",
     right: 20,
-    bottom: 80,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: "#1F2937",
+    bottom: 40,
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: "#00AFFF",
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
   },
 });
+
