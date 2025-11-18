@@ -184,7 +184,11 @@ export default function HomeScreen({ navigation }: Props) {
               color="black"
               style={{ marginRight: 15 }}
             />
-            <Image source={AppImages.avatar_4} style={styles.avatar} />
+            <TouchableOpacity
+              onPress={() => rootStackNavigation.navigate("Profile")}
+            >
+              <Image source={AppImages.avatar_4} style={styles.avatar} />
+            </TouchableOpacity>
           </View>
         </View>
 

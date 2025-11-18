@@ -32,7 +32,7 @@ export default function WelcomeScreen({ navigation }: Props) {
             resizeMode="contain"
           ></Image>
         </View>
-        <View style={{marginTop :100}}>
+        <View style={{ marginTop: 100 }}>
           <View style={styles.midtomContainer}>
             <Text style={styles.title}>Your music</Text>
           </View>
@@ -46,14 +46,16 @@ export default function WelcomeScreen({ navigation }: Props) {
         <View style={styles.bottomContainer}>
           <TouchableOpacity
             style={[styles.button, styles.createButton]}
-            onPress={() => navigation.replace("Main", { screen: "Home" })}
+            // ĐÃ SỬA: Điều hướng đến màn hình Đăng ký
+            onPress={() => navigation.navigate("Register")}
           >
             <Text style={styles.createButtonText}>Create an account</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, styles.loginButton]}
-            onPress={() => navigation.replace("Main", { screen: "Home" })}
+            // ĐÃ SỬA: Điều hướng đến màn hình Đăng nhập
+            onPress={() => navigation.navigate("Login")}
           >
             <Text style={styles.loginButtonText}>
               I already have an account
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.3)",
     padding: 20,
   },
-  midtomContainer :{alignItems: "center"},
+  midtomContainer: { alignItems: "center" },
   bottomContainer: { paddingBottom: 30 },
   title: {
     fontSize: 42,

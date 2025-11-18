@@ -10,10 +10,16 @@ import MainTabNavigator from "./navigation/MainTabNavigator";
 // 2. Import các màn hình trong RootStack
 import WelcomeScreen from "./screens/WelcomeScreen";
 import WelcomeScreenPremium from "./screens/WelcomeScreenPremium";
-import SubscriptionPlansScreen from "./screens/SubscriptionPlansScreen";
+// import SubscriptionPlansScreen from "./screens/SubscriptionPlansScreen"; // <--- XÓA DÒNG NÀY
 import PlaylistScreen from "./screens/PlaylistScreen";
 import PlayerScreen from "./screens/PlayerScreen";
 import ArtistScreen from "./screens/ArtistScreen";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
+import PaymentScreen from "./screens/PaymentScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import SettingsScreen from './screens/SettingsScreen';     // <--- 1. IMPORT
+import EditProfileScreen from './screens/EditProfileScreen';
 // 3. Khởi tạo RootStack
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -22,9 +28,6 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Welcome" // Bắt đầu từ màn hình Welcome
-        // initialRouteName="WelcomePremium" // test màn hình WelcomePremium
-        // initialRouteName="SubscriptionPlans" // test màn hình SubscriptionPlans
-        
         screenOptions={{
           headerShown: false, // Ẩn header cho toàn bộ Stack
         }}
@@ -32,11 +35,14 @@ export default function App() {
         {/* Các màn hình không có Tab Bar */}
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="WelcomePremium" component={WelcomeScreenPremium} />
-        <Stack.Screen name="SubscriptionPlans" component={SubscriptionPlansScreen} />
-
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Payment" component={PaymentScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />    
+        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
         {/* Màn hình này sẽ hiển thị trên cùng, che cả Tab Bar */}
         <Stack.Screen name="Playlist" component={PlaylistScreen} />
-
         {/* Nhóm màn hình có Tab Bar */}
         <Stack.Screen name="Main" component={MainTabNavigator} />
         <Stack.Screen

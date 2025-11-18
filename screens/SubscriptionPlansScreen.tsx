@@ -14,12 +14,14 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 
-import { RootStackScreenProps } from "../navigation/types";
+// <--- THAY ĐỔI QUAN TRỌNG SỐ 1
+import { MainTabScreenProps } from "../navigation/types";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const CARD_WIDTH = SCREEN_WIDTH - 40;
 
-type Props = RootStackScreenProps<"SubscriptionPlans">;
+// <--- THAY ĐỔI QUAN TRỌNG SỐ 2
+type Props = MainTabScreenProps<"Premium">;
 
 // Dữ liệu các gói đăng ký
 const PLANS = [
@@ -70,7 +72,7 @@ export default function SubscriptionPlansScreen({ navigation }: Props) {
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
-    const index = Math.round(scrollPosition / CARD_WIDTH);
+    const index = Math.round(scrollPosition / (CARD_WIDTH + 20));
     setActiveIndex(index);
   };
 
@@ -93,16 +95,15 @@ export default function SubscriptionPlansScreen({ navigation }: Props) {
         <ScrollView
           ref={scrollViewRef}
           horizontal
-          pagingEnabled
           showsHorizontalScrollIndicator={false}
           onScroll={handleScroll}
           scrollEventThrottle={16}
           decelerationRate="fast"
           snapToInterval={CARD_WIDTH + 20}
-          snapToAlignment="center"
+          snapToAlignment="start"
           contentContainerStyle={styles.cardsContainer}
         >
-          {PLANS.map((plan, index) => (
+          {PLANS.map((plan) => (
             <View key={plan.id} style={styles.cardWrapper}>
               <View style={styles.card}>
                 <View style={styles.cardHeader}>
@@ -123,7 +124,8 @@ export default function SubscriptionPlansScreen({ navigation }: Props) {
                 {/* Subscribe Button */}
                 <TouchableOpacity
                   style={styles.subscribeButton}
-                  onPress={() => navigation.navigate("WelcomePremium")}
+                  // Vì đang ở Tab, phải dùng getParent() để gọi Stack bên ngoài
+                  onPress={() => navigation.getParent()?.navigate("Payment")}
                 >
                   <Text style={styles.subscribeButtonText}>Subscribe now</Text>
                 </TouchableOpacity>
@@ -145,7 +147,8 @@ export default function SubscriptionPlansScreen({ navigation }: Props) {
         {/* Back Home Button */}
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.replace("Main", { screen: "Home" })}
+          // Vì đang ở Tab, chỉ cần navigate qua tab "Home"
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.backButtonText}>Back home</Text>
         </TouchableOpacity>
@@ -164,6 +167,7 @@ function FeatureItem({ text }: { text: string }) {
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -205,6 +209,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
     minHeight: 400,
+    justifyContent: "space-between",
   },
   cardHeader: {
     marginBottom: 20,
