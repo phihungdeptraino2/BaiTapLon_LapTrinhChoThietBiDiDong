@@ -1,8 +1,9 @@
-// navigation/types.ts
-import { StackScreenProps } from '@react-navigation/stack';
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { NavigatorScreenParams } from '@react-navigation/native'; // Cần cho lồng nhau
-import { Song } from '../interfaces/data';
+// navigation/types.ts - CẬP NHẬT
+import { StackScreenProps } from "@react-navigation/stack";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { NavigatorScreenParams } from "@react-navigation/native";
+import { Song } from "../interfaces/data";
+
 /**
  * Định nghĩa cho Bottom Tab Navigator
  */
@@ -25,9 +26,18 @@ export type RootStackParamList = {
   Register: undefined;
   Payment: undefined;
   Profile: undefined;
-  Settings: undefined;    
+  Settings: undefined;
   EditProfile: undefined;
-  Main: NavigatorScreenParams<MainTabParamList>; // Lồng MainTabParamList vào đây
+  AddPlaylist: undefined;
+  AddArtist: undefined;
+  Main: NavigatorScreenParams<MainTabParamList>;
+  LibraryPlaylistDetail: {
+    playlistId: string;
+    title: string;
+    artwork?: string;
+    artworkKey?: string;
+    artworkColor?: string;
+  };
   Playlist: {
     playlistId: string;
     title: string;

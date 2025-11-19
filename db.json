@@ -16,7 +16,7 @@
     },
     {
       "id": "3",
-      "title": " The Best",
+      "title": "The Best",
       "artist": "Sonson Boone",
       "artworkKey": "suggestion_28",
       "audioKey": "shape_of_you"
@@ -27,21 +27,30 @@
       "id": "1",
       "title": "Top 50",
       "subtitle": "Canada",
-      "artwork": ["#6E16B0", "#B0168C"],
+      "artwork": [
+        "#6E16B0",
+        "#B0168C"
+      ],
       "imageKey": "chart_31"
     },
     {
       "id": "2",
       "title": "Top 50",
       "subtitle": "Global",
-      "artwork": ["#16A1B0", "#16B09F"],
+      "artwork": [
+        "#16A1B0",
+        "#16B09F"
+      ],
       "imageKey": "chart_32"
     },
     {
       "id": "3",
       "title": "Top 50",
       "subtitle": "Daily",
-      "artwork": ["#B06216", "#B09616"],
+      "artwork": [
+        "#B06216",
+        "#B09616"
+      ],
       "imageKey": "chart_33"
     }
   ],
@@ -264,8 +273,8 @@
     {
       "id": "artist_3",
       "name": "Mer Watson",
-      "followers": "1.234K",
-      "avatarKey": "search_artist_101"
+      "avatarKey": "search_artist_101",
+      "followers": "1.234K"
     },
     {
       "id": "artist_4",
@@ -614,9 +623,17 @@
       "artwork": "👨",
       "artworkColor": "#E5E7EB",
       "audioKey": "flower"
+    },
+    {
+      "id": "1763545855074",
+      "title": "demo",
+      "artist": "Vhh",
+      "songCount": 0,
+      "artwork": "🎸",
+      "artworkColor": "#4ECDC4",
+      "createdAt": "2025-11-19T09:50:55.075Z"
     }
   ],
-
   "feed": [
     {
       "id": "1",
@@ -704,15 +721,16 @@
         "artist": "William King",
         "duration": "05:15",
         "plays": 245,
-        "artwork": "👁️",
-        "artworkColor": "#E9D5FF",
+        "artwork": "🎵",
+        "artworkColor": "#000",
         "artworkKey": "Image94"
       },
       "engagement": {
-        "likes": 45,
-        "comments": 9,
-        "reposts": 2
-      }
+        "likes": 12,
+        "comments": 4,
+        "reposts": 0
+      },
+      "comments": []
     }
   ]
 }
