@@ -632,6 +632,15 @@
       "artwork": "🎸",
       "artworkColor": "#4ECDC4",
       "createdAt": "2025-11-19T09:50:55.075Z"
+    },
+    {
+      "id": "1763567856629",
+      "title": "Tâm trạng",
+      "artist": "My Playlist",
+      "songCount": 0,
+      "artwork": "🎹",
+      "artworkColor": "#FF6B6B",
+      "createdAt": "2025-11-19T15:57:36.629Z"
     }
   ],
   "feed": [
