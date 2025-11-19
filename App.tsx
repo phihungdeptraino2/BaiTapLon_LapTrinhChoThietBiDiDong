@@ -3,6 +3,9 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
+// ✅ 1. Import TanStack Query
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 // 1. Import types và các bộ điều hướng
 import { RootStackParamList } from "./navigation/types";
 import MainTabNavigator from "./navigation/MainTabNavigator";
@@ -22,52 +25,62 @@ import EditProfileScreen from "./screens/EditProfileScreen";
 import AddPlaylistScreen from "./screens/AddPlaylistScreen";
 import AddArtistScreen from "./screens/AddArtistScreen";
 import LibraryPlaylistDetailScreen from "./screens/LibraryPlaylistDetailScreen";
+
+// ✅ 2. Tạo instance của QueryClient
+const queryClient = new QueryClient();
+
 // 3. Khởi tạo RootStack
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Welcome"
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        {/* Các màn hình không có Tab Bar */}
-        <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="WelcomePremium" component={WelcomeScreenPremium} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Payment" component={PaymentScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+    // ✅ 3. Bọc toàn bộ ứng dụng trong QueryClientProvider
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Welcome"
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          {/* Các màn hình không có Tab Bar */}
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen
+            name="WelcomePremium"
+            component={WelcomeScreenPremium}
+          />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Payment" component={PaymentScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="EditProfile" component={EditProfileScreen} />
 
-        {/* Màn hình thêm playlist và artist */}
-        <Stack.Screen name="AddPlaylist" component={AddPlaylistScreen} />
-        <Stack.Screen name="AddArtist" component={AddArtistScreen} />
+          {/* Màn hình thêm playlist và artist */}
+          <Stack.Screen name="AddPlaylist" component={AddPlaylistScreen} />
+          <Stack.Screen name="AddArtist" component={AddArtistScreen} />
 
-        {/* Màn hình Playlist */}
-        <Stack.Screen name="Playlist" component={PlaylistScreen} />
+          {/* Màn hình Playlist */}
+          <Stack.Screen name="Playlist" component={PlaylistScreen} />
 
-        {/* Nhóm màn hình có Tab Bar */}
-        <Stack.Screen name="Main" component={MainTabNavigator} />
-        <Stack.Screen
-          name="Player"
-          component={PlayerScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Artist"
-          component={ArtistScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="LibraryPlaylistDetail"
-          component={LibraryPlaylistDetailScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          {/* Nhóm màn hình có Tab Bar */}
+          <Stack.Screen name="Main" component={MainTabNavigator} />
+          <Stack.Screen
+            name="Player"
+            component={PlayerScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Artist"
+            component={ArtistScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LibraryPlaylistDetail"
+            component={LibraryPlaylistDetailScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }

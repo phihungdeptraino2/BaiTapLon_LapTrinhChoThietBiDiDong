@@ -1,5 +1,4 @@
-// screens/HomeScreen.tsx (Code hoàn chỉnh)
-import React, { useState, useEffect } from "react";
+import React, { useCallback } from "react";
 import {
   View,
   Text,
@@ -13,13 +12,14 @@ import {
   StatusBar,
   ImageBackground,
   ActivityIndicator,
+  RefreshControl, // ✅ Mới: Import RefreshControl
 } from "react-native";
 import { MainTabScreenProps, RootStackParamList } from "../navigation/types";
 import { Chart, Album, Artist, Song } from "../interfaces/data";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { LinearGradient } from "expo-linear-gradient";
+import { useQuery } from "@tanstack/react-query"; // ✅ Mới: Import React Query
 
 import { API_BASE_URL } from "../config";
 import { AppImages, getAssetImage } from "../utils/ImageManager";
@@ -27,40 +27,86 @@ import { AppImages, getAssetImage } from "../utils/ImageManager";
 type RootStackNavigationProp = StackNavigationProp<RootStackParamList>;
 type Props = MainTabScreenProps<"Home">;
 
+// ---------------------------------------------------------
+// 1. TÁCH CÁC HÀM FETCH DỮ LIỆU RA NGOÀI COMPONENT
+// ---------------------------------------------------------
+const fetchSuggestions = async () => {
+  const res = await fetch(`${API_BASE_URL}/suggestions`);
+  if (!res.ok) throw new Error("Network response was not ok");
+  return res.json();
+};
+
+const fetchCharts = async () => {
+  const res = await fetch(`${API_BASE_URL}/charts`);
+  if (!res.ok) throw new Error("Network response was not ok");
+  return res.json();
+};
+
+const fetchAlbums = async () => {
+  const res = await fetch(`${API_BASE_URL}/trending_albums`);
+  if (!res.ok) throw new Error("Network response was not ok");
+  return res.json();
+};
+
+const fetchArtists = async () => {
+  const res = await fetch(`${API_BASE_URL}/popular_artists`);
+  if (!res.ok) throw new Error("Network response was not ok");
+  return res.json();
+};
+
 export default function HomeScreen({ navigation }: Props) {
   const rootStackNavigation = useNavigation<RootStackNavigationProp>();
 
-  const [loading, setLoading] = useState(true);
-  const [suggestions, setSuggestions] = useState<Song[]>([]);
-  const [charts, setCharts] = useState<Chart[]>([]);
-  const [albums, setAlbums] = useState<Album[]>([]);
-  const [artists, setArtists] = useState<Artist[]>([]);
+  // ---------------------------------------------------------
+  // 2. SỬ DỤNG USEQUERY THAY CHO USEEFFECT
+  // ---------------------------------------------------------
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        setLoading(true);
-        const [suggestionsRes, chartsRes, albumsRes, artistsRes] =
-          await Promise.all([
-            fetch(`${API_BASE_URL}/suggestions`),
-            fetch(`${API_BASE_URL}/charts`),
-            fetch(`${API_BASE_URL}/trending_albums`),
-            fetch(`${API_BASE_URL}/popular_artists`),
-          ]);
+  // Query cho Suggestions
+  const suggestionsQuery = useQuery({
+    queryKey: ["home-suggestions"], // Key định danh cache
+    queryFn: fetchSuggestions,
+    staleTime: 1000 * 60 * 5, // 5 phút không cần fetch lại
+  });
 
-        setSuggestions(await suggestionsRes.json());
-        setCharts(await chartsRes.json());
-        setAlbums(await albumsRes.json());
-        setArtists(await artistsRes.json());
-      } catch (error) {
-        console.error("Lỗi khi tải dữ liệu:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Query cho Charts
+  const chartsQuery = useQuery({
+    queryKey: ["home-charts"],
+    queryFn: fetchCharts,
+    staleTime: 1000 * 60 * 5,
+  });
 
-    fetchAllData();
+  // Query cho Albums
+  const albumsQuery = useQuery({
+    queryKey: ["home-albums"],
+    queryFn: fetchAlbums,
+    staleTime: 1000 * 60 * 10, // Album ít thay đổi, cache 10 phút
+  });
+
+  // Query cho Artists
+  const artistsQuery = useQuery({
+    queryKey: ["home-artists"],
+    queryFn: fetchArtists,
+    staleTime: 1000 * 60 * 10,
+  });
+
+  // Gom trạng thái loading
+  const isLoading =
+    suggestionsQuery.isLoading ||
+    chartsQuery.isLoading ||
+    albumsQuery.isLoading ||
+    artistsQuery.isLoading;
+
+  // Hàm Refresh: Gọi lại tất cả API khi kéo xuống
+  const onRefresh = useCallback(() => {
+    suggestionsQuery.refetch();
+    chartsQuery.refetch();
+    albumsQuery.refetch();
+    artistsQuery.refetch();
   }, []);
+
+  // ---------------------------------------------------------
+  // CÁC HÀM RENDER UI (GIỮ NGUYÊN NHƯ CŨ)
+  // ---------------------------------------------------------
 
   const renderSectionHeader = (title: string) => (
     <View style={styles.sectionHeader}>
@@ -104,9 +150,7 @@ export default function HomeScreen({ navigation }: Props) {
         style={styles.chartImage}
         imageStyle={{ borderRadius: 15 }}
         resizeMode="cover"
-      >
-       
-      </ImageBackground>
+      ></ImageBackground>
       <Text style={styles.chartDescription}>Daily chart-toppers update</Text>
     </TouchableOpacity>
   );
@@ -150,7 +194,8 @@ export default function HomeScreen({ navigation }: Props) {
     </View>
   );
 
-  if (loading) {
+  // Hiển thị Loading lần đầu tiên
+  if (isLoading) {
     return (
       <SafeAreaView
         style={[
@@ -166,7 +211,14 @@ export default function HomeScreen({ navigation }: Props) {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        // ✅ Mới: Thêm RefreshControl
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.header}>
           <View>
             <Image
@@ -201,11 +253,13 @@ export default function HomeScreen({ navigation }: Props) {
           />
         </View>
 
+        {/* RENDER DỮ LIỆU TỪ QUERY.DATA (Thay vì state) */}
+
         <Text style={[styles.sectionTitle, { marginBottom: 15 }]}>
           Suggestions for you
         </Text>
         <FlatList
-          data={suggestions}
+          data={suggestionsQuery.data || []} // Dùng data từ query, fallback mảng rỗng
           renderItem={({ item }) => renderSuggestionCard({ song: item })}
           keyExtractor={(item) => item.id}
           horizontal
@@ -215,7 +269,7 @@ export default function HomeScreen({ navigation }: Props) {
 
         {renderSectionHeader("Charts")}
         <FlatList
-          data={charts}
+          data={chartsQuery.data || []}
           renderItem={renderChartCard}
           keyExtractor={(item) => item.id}
           horizontal
@@ -225,7 +279,7 @@ export default function HomeScreen({ navigation }: Props) {
 
         {renderSectionHeader("Trending albums")}
         <FlatList
-          data={albums}
+          data={albumsQuery.data || []}
           renderItem={renderAlbumCard}
           keyExtractor={(item) => item.id}
           horizontal
@@ -235,7 +289,7 @@ export default function HomeScreen({ navigation }: Props) {
 
         {renderSectionHeader("Popular artists")}
         <FlatList
-          data={artists}
+          data={artistsQuery.data || []}
           renderItem={renderArtistCard}
           keyExtractor={(item) => item.id}
           horizontal
@@ -249,6 +303,9 @@ export default function HomeScreen({ navigation }: Props) {
   );
 }
 
+// ---------------------------------------------------------
+// STYLES (GIỮ NGUYÊN)
+// ---------------------------------------------------------
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#FFFFFF" },
   container: {
@@ -303,7 +360,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
 
-  // ✅ STYLES CHO CHARTS
   chartCard: {
     width: 150,
     marginRight: 15,
@@ -314,32 +370,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
-  },
-  chartOverlay: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.15)",
-    borderRadius: 20,
-  },
-  chartTitle: {
-    color: "#FFF",
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    textShadowColor: "rgba(0, 0, 0, 0.75)",
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 6,
-  },
-  chartSubtitle: {
-    color: "#FFF",
-    fontSize: 18,
-    textAlign: "center",
-    marginTop: 5,
-    textShadowColor: "rgba(0, 0, 0, 0.6)",
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
   },
   chartDescription: {
     color: "#888",
